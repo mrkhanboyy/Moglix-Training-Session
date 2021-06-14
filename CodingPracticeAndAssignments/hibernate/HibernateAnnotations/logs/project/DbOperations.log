@@ -1,0 +1,227 @@
+2017-07-20 19:02:52 INFO  ApplicationTest:17 - 
+=======CREATE RECORDS=======
+2017-07-20 19:02:54 INFO  DbOperations:45 - Successfully Created Student= Id: 1, Name: JavaCodeGeek, Age: 20
+2017-07-20 19:02:54 INFO  DbOperations:45 - Successfully Created Student= Id: 2, Name: Harry Potter, Age: 10
+2017-07-20 19:02:54 INFO  DbOperations:45 - Successfully Created Student= Id: 3, Name: Lucifer, Age: 5
+2017-07-20 19:02:54 INFO  ApplicationTest:22 - 
+=======READ RECORDS=======
+2017-07-20 19:02:54 INFO  DbOperations:57 - Student Records Available In Database Are?= 3
+2017-07-20 19:02:54 INFO  ApplicationTest:25 - Student= Id: 1, Name: JavaCodeGeek, Age: 20
+2017-07-20 19:02:54 INFO  ApplicationTest:25 - Student= Id: 2, Name: Harry Potter, Age: 10
+2017-07-20 19:02:54 INFO  ApplicationTest:25 - Student= Id: 3, Name: Lucifer, Age: 5
+2017-07-20 19:02:54 INFO  ApplicationTest:28 - 
+=======UPDATE RECORDS=======
+2017-07-20 19:02:54 INFO  DbOperations:76 - Student Record Is Successfully Updated!= Student= Id: 1, Name: Java Code Geek, Age: 25
+2017-07-20 19:02:54 INFO  ApplicationTest:32 - 
+=======READ RECORDS AFTER UPDATION=======
+2017-07-20 19:02:54 INFO  DbOperations:57 - Student Records Available In Database Are?= 3
+2017-07-20 19:02:54 INFO  ApplicationTest:35 - Student= Id: 1, Name: Java Code Geek, Age: 25
+2017-07-20 19:02:54 INFO  ApplicationTest:35 - Student= Id: 2, Name: Harry Potter, Age: 10
+2017-07-20 19:02:54 INFO  ApplicationTest:35 - Student= Id: 3, Name: Lucifer, Age: 5
+2017-07-20 19:02:54 INFO  ApplicationTest:38 - 
+=======DELETE RECORD=======
+2017-07-20 19:02:55 INFO  DbOperations:93 - Successfully Record Is Successfully Deleted!=  Student= Id: 2, Name: Harry Potter, Age: 10
+2017-07-20 19:02:55 INFO  ApplicationTest:40 - 
+=======READ RECORDS AFTER DELETION=======
+2017-07-20 19:02:55 INFO  DbOperations:57 - Student Records Available In Database Are?= 2
+2017-07-20 19:02:55 INFO  ApplicationTest:43 - Student= Id: 1, Name: Java Code Geek, Age: 25
+2017-07-20 19:02:55 INFO  ApplicationTest:43 - Student= Id: 3, Name: Lucifer, Age: 5
+2017-07-20 19:02:55 INFO  ApplicationTest:46 - 
+=======DELETE ALL RECORDS=======
+2017-07-20 19:02:55 INFO  DbOperations:121 - Successfully Deleted All Records From The Database Table!
+2017-07-20 19:02:55 INFO  ApplicationTest:48 - 
+=======READ RECORDS AFTER ALL RECORDS DELETION=======
+2017-07-20 19:02:55 INFO  DbOperations:57 - Student Records Available In Database Are?= 0
+2021-06-11 12:08:31 INFO  ApplicationTest:17 - 
+=======CREATE RECORDS=======
+2021-06-11 12:08:32 ERROR SqlExceptionHelper:146 - Unknown column 'age' in 'field list'
+2021-06-11 12:10:07 INFO  ApplicationTest:17 - 
+=======CREATE RECORDS=======
+2021-06-11 12:10:07 ERROR SqlExceptionHelper:146 - Unknown column 'agee' in 'field list'
+2021-06-11 12:13:49 INFO  ApplicationTest:17 - 
+=======CREATE RECORDS=======
+2021-06-11 12:13:50 ERROR SqlExceptionHelper:146 - Table 'practice.student' doesn't exist
+2021-06-11 12:15:31 INFO  ApplicationTest:17 - 
+=======CREATE RECORDS=======
+2021-06-11 12:17:18 INFO  ApplicationTest:17 - 
+=======CREATE RECORDS=======
+2021-06-11 12:17:18 ERROR SqlExceptionHelper:146 - Field 'id' doesn't have a default value
+2021-06-11 12:18:00 INFO  ApplicationTest:17 - 
+=======CREATE RECORDS=======
+2021-06-11 12:18:01 ERROR SqlExceptionHelper:146 - Table 'practice.student' doesn't exist
+2021-06-11 12:19:30 INFO  ApplicationTest:17 - 
+=======CREATE RECORDS=======
+2021-06-11 12:19:30 ERROR SqlExceptionHelper:146 - Table 'practice.student' doesn't exist
+2021-06-11 12:20:35 INFO  ApplicationTest:17 - 
+=======CREATE RECORDS=======
+2021-06-11 12:20:36 INFO  DatabaseMetaData:147 - HHH000262: Table not found: student
+2021-06-11 12:20:36 INFO  DatabaseMetaData:147 - HHH000262: Table not found: student
+2021-06-11 12:20:36 INFO  DatabaseMetaData:147 - HHH000262: Table not found: student
+2021-06-11 12:20:36 INFO  DbOperations:45 - Successfully Created Student= Id: 1, Name: JavaCodeGeek, Age: 20
+2021-06-11 12:20:36 INFO  DbOperations:45 - Successfully Created Student= Id: 2, Name: Harry Potter, Age: 10
+2021-06-11 12:20:36 INFO  DbOperations:45 - Successfully Created Student= Id: 3, Name: Lucifer, Age: 5
+2021-06-11 12:20:36 INFO  ApplicationTest:22 - 
+=======READ RECORDS=======
+2021-06-11 12:20:36 INFO  DbOperations:57 - Student Records Available In Database Are?= 3
+2021-06-11 12:20:36 INFO  ApplicationTest:25 - Student= Id: 1, Name: JavaCodeGeek, Age: 20
+2021-06-11 12:20:36 INFO  ApplicationTest:25 - Student= Id: 2, Name: Harry Potter, Age: 10
+2021-06-11 12:20:36 INFO  ApplicationTest:25 - Student= Id: 3, Name: Lucifer, Age: 5
+2021-06-11 12:20:36 INFO  ApplicationTest:28 - 
+=======UPDATE RECORDS=======
+2021-06-11 12:20:36 INFO  DbOperations:76 - Student Record Is Successfully Updated!= Student= Id: 1, Name: Java Code Geek, Age: 25
+2021-06-11 12:20:36 INFO  ApplicationTest:32 - 
+=======READ RECORDS AFTER UPDATION=======
+2021-06-11 12:20:36 INFO  DbOperations:57 - Student Records Available In Database Are?= 3
+2021-06-11 12:20:36 INFO  ApplicationTest:35 - Student= Id: 1, Name: Java Code Geek, Age: 25
+2021-06-11 12:20:36 INFO  ApplicationTest:35 - Student= Id: 2, Name: Harry Potter, Age: 10
+2021-06-11 12:20:36 INFO  ApplicationTest:35 - Student= Id: 3, Name: Lucifer, Age: 5
+2021-06-11 12:20:36 INFO  ApplicationTest:38 - 
+=======DELETE RECORD=======
+2021-06-11 12:20:36 INFO  DbOperations:93 - Successfully Record Is Successfully Deleted!=  Student= Id: 2, Name: Harry Potter, Age: 10
+2021-06-11 12:20:36 INFO  ApplicationTest:40 - 
+=======READ RECORDS AFTER DELETION=======
+2021-06-11 12:20:36 INFO  DbOperations:57 - Student Records Available In Database Are?= 2
+2021-06-11 12:20:36 INFO  ApplicationTest:43 - Student= Id: 1, Name: Java Code Geek, Age: 25
+2021-06-11 12:20:36 INFO  ApplicationTest:43 - Student= Id: 3, Name: Lucifer, Age: 5
+2021-06-11 12:20:36 INFO  ApplicationTest:46 - 
+=======DELETE ALL RECORDS=======
+2021-06-11 12:20:36 INFO  DbOperations:121 - Successfully Deleted All Records From The Database Table!
+2021-06-11 12:20:36 INFO  ApplicationTest:48 - 
+=======READ RECORDS AFTER ALL RECORDS DELETION=======
+2021-06-11 12:20:37 INFO  DbOperations:57 - Student Records Available In Database Are?= 0
+2021-06-11 12:44:47 INFO  ApplicationTest:17 - 
+=======CREATE RECORDS=======
+2021-06-11 12:44:48 INFO  DbOperations:45 - Successfully Created Student= Id: 4, Name: JavaCodeGeek, Age: 20
+2021-06-11 12:44:48 INFO  DbOperations:45 - Successfully Created Student= Id: 5, Name: Harry Potter, Age: 10
+2021-06-11 12:44:48 INFO  DbOperations:45 - Successfully Created Student= Id: 6, Name: Lucifer, Age: 5
+2021-06-11 12:44:48 INFO  ApplicationTest:22 - 
+=======READ RECORDS=======
+2021-06-11 12:44:48 INFO  DbOperations:57 - Student Records Available In Database Are?= 3
+2021-06-11 12:44:48 INFO  ApplicationTest:25 - Student= Id: 4, Name: JavaCodeGeek, Age: 20
+2021-06-11 12:44:48 INFO  ApplicationTest:25 - Student= Id: 5, Name: Harry Potter, Age: 10
+2021-06-11 12:44:48 INFO  ApplicationTest:25 - Student= Id: 6, Name: Lucifer, Age: 5
+2021-06-11 12:44:48 INFO  ApplicationTest:28 - 
+=======UPDATE RECORDS=======
+2021-06-11 12:44:48 INFO  DbOperations:76 - Student Record Is Successfully Updated!= Student= Id: 4, Name: Java Code Geek, Age: 25
+2021-06-11 12:44:48 INFO  ApplicationTest:32 - 
+=======READ RECORDS AFTER UPDATION=======
+2021-06-11 12:44:48 INFO  DbOperations:57 - Student Records Available In Database Are?= 3
+2021-06-11 12:44:48 INFO  ApplicationTest:35 - Student= Id: 4, Name: Java Code Geek, Age: 25
+2021-06-11 12:44:48 INFO  ApplicationTest:35 - Student= Id: 5, Name: Harry Potter, Age: 10
+2021-06-11 12:44:48 INFO  ApplicationTest:35 - Student= Id: 6, Name: Lucifer, Age: 5
+2021-06-11 12:44:48 INFO  ApplicationTest:38 - 
+=======DELETE RECORD=======
+2021-06-11 12:44:48 INFO  DbOperations:93 - Successfully Record Is Successfully Deleted!=  Student= Id: 5, Name: Harry Potter, Age: 10
+2021-06-11 12:44:48 INFO  ApplicationTest:40 - 
+=======READ RECORDS AFTER DELETION=======
+2021-06-11 12:44:48 INFO  DbOperations:57 - Student Records Available In Database Are?= 2
+2021-06-11 12:44:48 INFO  ApplicationTest:43 - Student= Id: 4, Name: Java Code Geek, Age: 25
+2021-06-11 12:44:48 INFO  ApplicationTest:43 - Student= Id: 6, Name: Lucifer, Age: 5
+2021-06-11 12:44:48 INFO  ApplicationTest:46 - 
+=======DELETE ALL RECORDS=======
+2021-06-11 12:44:48 INFO  DbOperations:121 - Successfully Deleted All Records From The Database Table!
+2021-06-11 12:44:48 INFO  ApplicationTest:48 - 
+=======READ RECORDS AFTER ALL RECORDS DELETION=======
+2021-06-11 12:44:48 INFO  DbOperations:57 - Student Records Available In Database Are?= 0
+2021-06-11 12:50:32 INFO  ApplicationTest:17 - 
+=======CREATE RECORDS=======
+2021-06-11 12:50:33 INFO  DbOperations:45 - Successfully Created Student= Id: 7, Name: JavaCodeGeek, Age: 20
+2021-06-11 12:50:33 INFO  DbOperations:45 - Successfully Created Student= Id: 8, Name: Harry Potter, Age: 10
+2021-06-11 12:50:33 INFO  DbOperations:45 - Successfully Created Student= Id: 9, Name: Lucifer, Age: 5
+2021-06-11 12:50:33 INFO  ApplicationTest:22 - 
+=======READ RECORDS=======
+2021-06-11 12:50:33 INFO  DbOperations:57 - Student Records Available In Database Are?= 3
+2021-06-11 12:50:33 INFO  ApplicationTest:25 - Student= Id: 7, Name: JavaCodeGeek, Age: 20
+2021-06-11 12:50:33 INFO  ApplicationTest:25 - Student= Id: 8, Name: Harry Potter, Age: 10
+2021-06-11 12:50:33 INFO  ApplicationTest:25 - Student= Id: 9, Name: Lucifer, Age: 5
+2021-06-11 12:50:33 INFO  ApplicationTest:28 - 
+=======UPDATE RECORDS=======
+2021-06-11 12:50:33 INFO  DbOperations:76 - Student Record Is Successfully Updated!= Student= Id: 7, Name: Java Code Geek, Age: 25
+2021-06-11 12:50:33 INFO  ApplicationTest:32 - 
+=======READ RECORDS AFTER UPDATION=======
+2021-06-11 12:50:33 INFO  DbOperations:57 - Student Records Available In Database Are?= 3
+2021-06-11 12:50:33 INFO  ApplicationTest:35 - Student= Id: 7, Name: Java Code Geek, Age: 25
+2021-06-11 12:50:33 INFO  ApplicationTest:35 - Student= Id: 8, Name: Harry Potter, Age: 10
+2021-06-11 12:50:33 INFO  ApplicationTest:35 - Student= Id: 9, Name: Lucifer, Age: 5
+2021-06-11 12:50:33 INFO  ApplicationTest:38 - 
+=======DELETE RECORD=======
+2021-06-11 12:50:33 INFO  DbOperations:93 - Successfully Record Is Successfully Deleted!=  Student= Id: 8, Name: Harry Potter, Age: 10
+2021-06-11 12:50:33 INFO  ApplicationTest:40 - 
+=======READ RECORDS AFTER DELETION=======
+2021-06-11 12:50:33 INFO  DbOperations:57 - Student Records Available In Database Are?= 2
+2021-06-11 12:50:33 INFO  ApplicationTest:43 - Student= Id: 7, Name: Java Code Geek, Age: 25
+2021-06-11 12:50:33 INFO  ApplicationTest:43 - Student= Id: 9, Name: Lucifer, Age: 5
+2021-06-11 12:50:53 INFO  ApplicationTest:17 - 
+=======CREATE RECORDS=======
+2021-06-11 12:50:54 INFO  DbOperations:45 - Successfully Created Student= Id: 10, Name: JavaCodeGeek, Age: 20
+2021-06-11 12:50:54 INFO  DbOperations:45 - Successfully Created Student= Id: 11, Name: Harry Potter, Age: 10
+2021-06-11 12:50:55 INFO  DbOperations:45 - Successfully Created Student= Id: 12, Name: Lucifer, Age: 5
+2021-06-11 12:50:55 INFO  ApplicationTest:22 - 
+=======READ RECORDS=======
+2021-06-11 12:50:55 INFO  DbOperations:57 - Student Records Available In Database Are?= 5
+2021-06-11 12:50:55 INFO  ApplicationTest:25 - Student= Id: 7, Name: Java Code Geek, Age: 25
+2021-06-11 12:50:55 INFO  ApplicationTest:25 - Student= Id: 9, Name: Lucifer, Age: 5
+2021-06-11 12:50:55 INFO  ApplicationTest:25 - Student= Id: 10, Name: JavaCodeGeek, Age: 20
+2021-06-11 12:50:55 INFO  ApplicationTest:25 - Student= Id: 11, Name: Harry Potter, Age: 10
+2021-06-11 12:50:55 INFO  ApplicationTest:25 - Student= Id: 12, Name: Lucifer, Age: 5
+2021-06-11 12:50:55 INFO  ApplicationTest:28 - 
+=======UPDATE RECORDS=======
+2021-06-11 12:50:55 INFO  DbOperations:76 - Student Record Is Successfully Updated!= Student= Id: 10, Name: Java Code Geek, Age: 25
+2021-06-11 12:50:55 INFO  ApplicationTest:32 - 
+=======READ RECORDS AFTER UPDATION=======
+2021-06-11 12:50:55 INFO  DbOperations:57 - Student Records Available In Database Are?= 5
+2021-06-11 12:50:55 INFO  ApplicationTest:35 - Student= Id: 7, Name: Java Code Geek, Age: 25
+2021-06-11 12:50:55 INFO  ApplicationTest:35 - Student= Id: 9, Name: Lucifer, Age: 5
+2021-06-11 12:50:55 INFO  ApplicationTest:35 - Student= Id: 10, Name: Java Code Geek, Age: 25
+2021-06-11 12:50:55 INFO  ApplicationTest:35 - Student= Id: 11, Name: Harry Potter, Age: 10
+2021-06-11 12:50:55 INFO  ApplicationTest:35 - Student= Id: 12, Name: Lucifer, Age: 5
+2021-06-11 12:50:55 INFO  ApplicationTest:38 - 
+=======DELETE RECORD=======
+2021-06-11 12:50:55 INFO  DbOperations:93 - Successfully Record Is Successfully Deleted!=  Student= Id: 11, Name: Harry Potter, Age: 10
+2021-06-11 12:50:55 INFO  ApplicationTest:40 - 
+=======READ RECORDS AFTER DELETION=======
+2021-06-11 12:50:55 INFO  DbOperations:57 - Student Records Available In Database Are?= 4
+2021-06-11 12:50:55 INFO  ApplicationTest:43 - Student= Id: 7, Name: Java Code Geek, Age: 25
+2021-06-11 12:50:55 INFO  ApplicationTest:43 - Student= Id: 9, Name: Lucifer, Age: 5
+2021-06-11 12:50:55 INFO  ApplicationTest:43 - Student= Id: 10, Name: Java Code Geek, Age: 25
+2021-06-11 12:50:55 INFO  ApplicationTest:43 - Student= Id: 12, Name: Lucifer, Age: 5
+2021-06-11 12:50:55 INFO  ApplicationTest:46 - 
+=======DELETE ALL RECORDS=======
+2021-06-11 12:50:55 INFO  DbOperations:121 - Successfully Deleted All Records From The Database Table!
+2021-06-11 12:50:55 INFO  ApplicationTest:48 - 
+=======READ RECORDS AFTER ALL RECORDS DELETION=======
+2021-06-11 12:50:55 INFO  DbOperations:57 - Student Records Available In Database Are?= 0
+2021-06-11 12:54:17 INFO  ApplicationTest:17 - 
+=======CREATE RECORDS=======
+2021-06-11 12:54:18 INFO  DbOperations:45 - Successfully Created Student= Id: 13, Name: JavaCodeGeek, Age: 20
+2021-06-11 12:54:18 INFO  DbOperations:45 - Successfully Created Student= Id: 14, Name: Harry Potter, Age: 10
+2021-06-11 12:54:18 INFO  DbOperations:45 - Successfully Created Student= Id: 15, Name: Lucifer, Age: 5
+2021-06-11 12:54:18 INFO  ApplicationTest:22 - 
+=======READ RECORDS=======
+2021-06-11 12:54:18 INFO  DbOperations:57 - Student Records Available In Database Are?= 3
+2021-06-11 12:54:18 INFO  ApplicationTest:25 - Student= Id: 13, Name: JavaCodeGeek, Age: 20
+2021-06-11 12:54:18 INFO  ApplicationTest:25 - Student= Id: 14, Name: Harry Potter, Age: 10
+2021-06-11 12:54:18 INFO  ApplicationTest:25 - Student= Id: 15, Name: Lucifer, Age: 5
+2021-06-11 12:54:18 INFO  ApplicationTest:28 - 
+=======UPDATE RECORDS=======
+2021-06-11 12:54:18 INFO  DbOperations:76 - Student Record Is Successfully Updated!= Student= Id: 13, Name: Java Code Geek, Age: 25
+2021-06-11 12:54:18 INFO  ApplicationTest:32 - 
+=======READ RECORDS AFTER UPDATION=======
+2021-06-11 12:54:18 INFO  DbOperations:57 - Student Records Available In Database Are?= 3
+2021-06-11 12:54:18 INFO  ApplicationTest:35 - Student= Id: 13, Name: Java Code Geek, Age: 25
+2021-06-11 12:54:18 INFO  ApplicationTest:35 - Student= Id: 14, Name: Harry Potter, Age: 10
+2021-06-11 12:54:18 INFO  ApplicationTest:35 - Student= Id: 15, Name: Lucifer, Age: 5
+2021-06-11 12:54:18 INFO  ApplicationTest:38 - 
+=======DELETE RECORD=======
+2021-06-11 12:54:18 INFO  DbOperations:93 - Successfully Record Is Successfully Deleted!=  Student= Id: 14, Name: Harry Potter, Age: 10
+2021-06-11 12:54:18 INFO  ApplicationTest:40 - 
+=======READ RECORDS AFTER DELETION=======
+2021-06-11 12:54:18 INFO  DbOperations:57 - Student Records Available In Database Are?= 2
+2021-06-11 12:54:18 INFO  ApplicationTest:43 - Student= Id: 13, Name: Java Code Geek, Age: 25
+2021-06-11 12:54:18 INFO  ApplicationTest:43 - Student= Id: 15, Name: Lucifer, Age: 5
+2021-06-11 12:54:18 INFO  ApplicationTest:46 - 
+=======DELETE ALL RECORDS=======
+2021-06-11 12:54:18 INFO  DbOperations:121 - Successfully Deleted All Records From The Database Table!
+2021-06-11 12:54:18 INFO  ApplicationTest:48 - 
+=======READ RECORDS AFTER ALL RECORDS DELETION=======
+2021-06-11 12:54:18 INFO  DbOperations:57 - Student Records Available In Database Are?= 0

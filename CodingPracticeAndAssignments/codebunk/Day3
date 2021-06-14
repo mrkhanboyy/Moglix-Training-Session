@@ -1,0 +1,751 @@
+https://codebunk.com/b/4341100285240/
+
+
+
+interface
+inheritance 
+string 
+containement
+inner classess
+upcasting downcasting
+method overloading
+wrapper classsess
+
+ArrayList
+
+
+insert 
+update 
+delete
+display
+
+
+
+
+
+
+WageEmployee
+
+noOfWorkingHourse
+day
+month
+year
+netSalary
+
+
+4
+June 
+2021
+
+30 days in june momth
+
+perDaySalary = bs / 30
+perHourSalary = perDaySalary/8
+
+netSalary = perHourSalary * noOfWorkingHourse
+
+
+
+
+
+
+
+
+
+
+
+inteface OrganizationMethods
+   acceptEmployeeDetails
+   calculateSalary
+ 
+DateOfBirth       Address
+
+
+        Employee   
+
+
+SalesEmployee    	
+sales<5000
+comm=2%on bs
+
+sales>=5000 & <7000
+comm=5% on bs
+
+sales>=7000
+comm = 10% on bs
+
+
+
+
+
+
+
+https://www.studytonight.com/java/wrapper-class.php
+    
+    
+    
+
+
+
+public class WrapperClassExample {
+	
+	public static void xyz(Integer a) {
+		a=a*100;
+	}
+	
+	public static void main(String[] args) {
+		
+		@SuppressWarnings("removal")
+		Integer a=new Integer(100);
+		
+		System.out.println("value of x is "+a);
+		xyz(a);
+		System.out.println("value of x is "+a);
+		
+        
+        
+        }
+    }
+
+
+
+Wrapper classes are final
+They furnish methods that provide basic capabilities such as class conversions, value testing etc
+Constructors of wrapped classes allow objects to be created & converted from primitive values & strings
+	E.g. int intVal = 10;
+		 int intObj  = new Integer(intVal);
+
+        
+        
+        
+
+
+Need
+To provide a home for methods & variables related to the type
+Create objects to hold values for generically written classes that know how to handle only object references
+
+
+
+
+Java provides 8 primitive data types. But sometimes there's a need to convert  a primitive type to an object
+All java primitive types have class counterparts
+These are called object wrappers or wrapper classes
+
+
+
+
+
+class Student{
+	String name;
+	int rollNo;
+	static String cllgName;
+	
+	
+	static int counter=0;
+	
+	
+	public Student(String name) {
+		this.name=name;
+		this.rollNo=setRollNo();
+	}
+	
+	static int setRollNo() {
+		counter++;
+		return counter;
+	}
+	
+	
+	static void setCllgName(String name) {
+		cllgName=name;
+	}
+	
+	void showStudentInfo() {
+		System.out.println("NAme"+this.name);
+		System.out.println("Roll no"+this.rollNo);
+		System.out.println("col name"+cllgName);
+	}
+	
+}
+
+
+
+public class StaicExample {
+
+	
+	public static void main(String[] args) {
+		Student.setCllgName("ABC");
+		
+		Student s1=new Student("EShan");
+		Student s2=new Student("Tanish");
+		
+		s1.showStudentInfo();
+		s2.showStudentInfo();
+	}
+}
+
+
+
+
+
+
+--------------------------------------------------------------
+
+public class StaicExample {
+	
+	static int a=10;
+	static int b;
+	
+	static {
+		System.out.println("static block is called");
+		b=a*4;
+	}
+	
+
+	public static void main(String[] args) {
+		System.out.println("Main block");
+		System.out.println("A"+a);
+		System.out.println("B"+b);
+
+	}
+
+}
+
+
+
+
+
+
+---------------------------------------------
+public class StaicExample {
+	
+	static void show() {
+		System.out.println("show method is called");
+	}
+
+	public static void main(String[] args) {
+		show();
+
+	}
+
+}
+
+
+
+
+
+
+
+
+-----------------------------------------------------
+class Demo{
+	void show() {
+		System.out.println("Show method demo class");
+	}
+}
+
+class Flavor1Demo{
+	
+	static Hello h=new Hello() {
+
+		@Override
+		public void show() {
+			System.out.println("show method from Flvour1 is called");
+			
+		}
+		
+	};
+	
+	
+	
+//	static Demo d=new Demo() {
+//		void show() {
+//			super.show();
+//			System.out.println("Flavor1.demo.show");
+//		}
+//	};
+}
+
+
+interface Hello{
+	void show();
+}
+
+
+
+
+
+public class InnerClassExample {
+public static void main(String[] args) {
+	Flavor1Demo.h.show();
+	
+}
+}
+
+------------------------------------------------------
+class Demo{
+	void show() {
+		System.out.println("Show method demo class");
+	}
+}
+
+class Flavor1Demo{
+	static Demo d=new Demo() {
+		void show() {
+			super.show();
+			System.out.println("Flavor1.demo.show");
+		}
+	};
+}
+
+
+
+
+
+
+public class InnerClassExample {
+public static void main(String[] args) {
+	Flavor1Demo.d.show();
+	
+}
+}
+
+
+
+-------------------------------------
+
+class Outer{
+	void outerMethod() {
+		int x=100;
+		System.out.println("Outer method is called");
+		class Inner{
+			void innerMethod() {
+				System.out.println("Inner method is called"+x);
+			}
+		}
+		
+		Inner y=new Inner();
+		y.innerMethod();
+	}
+	
+}
+
+
+public class InnerClassExample {
+public static void main(String[] args) {
+	Outer o=new Outer();
+	o.outerMethod();
+}
+}
+
+
+
+
+---------------------------------------------------------------------
+
+
+
+class Outer{
+	void outerMethod() {
+		System.out.println("outer method outer class");
+		
+		
+		class Inner{
+			void innerMethod() {
+				System.out.println("Inner method inner class");
+			}
+		}
+		
+		Inner i=new Inner();
+		i.innerMethod();
+	}
+}
+
+
+
+
+public class InnerClassExample {
+	
+	public static void main(String[] args) {
+		Outer o=new Outer();
+		o.outerMethod();
+	}
+
+}
+
+
+
+
+
+
+class Outer{
+	class Inner{
+		public void show() {
+			System.out.println("Show from Outer->Inner");
+		}
+	}
+}
+
+
+
+public class InnerClassExample {
+
+	public static void main(String[] args) {
+		Outer.Inner inner=new Outer().new Inner();
+		System.out.println(inner);
+		inner.show();
+	}
+
+}
+
+
+
+
+
+
+class Job{
+	
+	private int id;
+	private String role;
+	private long salary;
+	
+	
+	public Job() {
+		id=0;
+		role="";
+		salary=0;
+	}
+
+
+	public Job(int id, String role, long salary) {
+		
+		this.id = id;
+		this.role = role;
+		this.salary = salary;
+	}
+
+
+	public int getId() {
+		return id;
+	}
+
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+
+	public String getRole() {
+		return role;
+	}
+
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
+
+	public long getSalary() {
+		return salary;
+	}
+
+
+	public void setSalary(long salary) {
+		this.salary = salary;
+	}
+
+
+	@Override
+	public String toString() {
+		return "Job [id=" + id + ", role=" + role + ", salary=" + salary + "]";
+	}
+	
+	
+}
+
+
+class Person{
+	private String name;
+	private Job job;   ///Containment object
+	
+	public Person() {
+		name="";
+		job=new Job();
+	}
+	
+	public Person(String name, Job job) {
+		super();
+		this.name = name;
+		this.job = job;
+	}
+
+	@Override
+	public String toString() {
+		return "Person [name=" + name + ", job=" + job + "]";
+	}	
+}
+
+
+
+
+
+
+
+
+public class ContainmentExample {
+	public static void main(String[] args) {
+		Person p=new Person("Eshan",new Job(101,"HR",34455));
+		
+		System.out.println(p);
+		
+		
+		
+		
+	}
+}
+
+
+-------------------------------------------------------------------------------------------------------
+
+
+
+https://quizizz.com/join?gc=678785
+    
+    
+
+
+JAVA :
+	Object Oriented Programming
+		SourceCode
+			upload the example done durng the training
+		Assignment
+			given assignment
+		InterviewQuestions
+			documents files associated with IQ
+		Example Material
+			Sample code 
+
+	ExceptionHandling
+		SourceCode
+			upload the example done durng the training
+		Assignment
+			given assignment
+		InterviewQuestions
+			documents files associated with IQ
+		Example Material
+			Sample code 
+
+		
+        
+        
+        
+        
+
+
+1.What is an Exception in Java?
+2.What are the Exception Handling Keywords in Java?
+3.Explain Java Exception Hierarchy?
+4.What are the important methods of Java Exception Class?
+5.What is the difference between Checked and Unchecked Exceptions in Java?
+6.What is the difference between the throw and throws keyword in Java?
+7.How to write custom exceptions in Java?
+8.What is OutOfMemoryError in Java?
+
+
+
+package com.training.org;
+
+class MyException extends Exception{
+	public MyException(String s) {
+		super(s);
+	}
+}
+
+
+public class UserDefinedException {
+	public static void main(String[] args) {
+		try {
+			throw new MyException("This is my exception");
+		}
+		catch (MyException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+}
+
+
+
+
+
+package com.training.org;
+class InvaliedAgeException extends Exception{
+	public InvaliedAgeException(String s) {
+		super(s);
+	}
+
+	public String getMyMessage() {
+		return "MY MEssage";
+	}
+}
+
+
+class TestCustomException{
+	public static void validate(int age) throws InvaliedAgeException {
+		if(age<18) {
+			throw new InvaliedAgeException("Not valied age");
+		}
+		else
+			System.out.println("Everything is ok for vote");
+	}
+}
+
+
+
+
+
+public class UserDefinedException {
+	public static void main(String[] args) {
+		try {
+			TestCustomException.validate(12);
+
+		}
+		catch (Exception e) {
+			System.out.println(e);
+		}
+	}
+
+}
+
+
+
+
+
+
+
+
+Sub class cannot throw more Exceptions than the super class.
+If the method throwing an exception does not catch it, the method must declare that it throws that exception.
+The exceptions can cascade from one method to its caller and so on till finally the main() throws the exception
+The catch block can contain code for 	
+Rectification of the error if possible
+Display the error in a customized user friendly way.
+
+
+
+
+
+
+Exception handling is an object oriented way of handling errors.
+Keeps problem solving & error  handling code different.
+Thus, program is less complex.
+Exceptions in Java are actual objects, 
+Exception objects encapsulate the error information.
+Exceptions are created when an abnormal situation arises in java program.
+
+
+
+
+
+
+
+https://medium.com/from-the-scratch/wtf-is-synchronous-and-asynchronous-1a75afd039df
+    
+    
+    
+
+
+String 1] The length of string object is fixed 
+SB 1] THe lenght of the string buffer can be increased
+
+
+2] String is not sychronized
+2] StringBuffer is  sychronized
+
+
+
+
+
+public class StringExample {
+
+	public static void main(String[] args) {
+		
+		StringBuffer sb=new StringBuffer("HEllo");
+		sb.append("String");
+		
+		System.out.println(sb);
+		
+		sb.insert(1, "NEW");
+		System.out.println(sb);
+		
+		
+		
+		sb.replace(1,3,"JAVA");
+		System.out.println(sb);
+		
+		
+		sb.reverse();
+		System.out.println(sb);
+		
+//		String s1="Hello String";
+//		char ch[]= {'s','t','r','i','n','g'};
+//		
+//		String s2=new String(ch);
+//		
+//		String s3=new String("Example string");
+//		
+//		System.out.println(s3.length());
+//		
+//		System.out.println(s3.concat("New STring"));
+//		
+//		System.out.println(s3.indexOf('a'));
+//		
+//		System.out.println(s3.charAt(0));
+//		
+//		System.out.println(s3.hashCode());
+//		System.out.println(s3);
+//				
+				
+		
+		
+	}
+
+}
+
+
+
+
+
+
+
+StringBuffer class allows to create ‘mutable’ strings
+It preallocates memory of a given length
+The buffer grows automatically as characters are added
+	E.g. StringBuffer sb = new StringBuffer();
+
+    
+    
+    
+    
+    
+
+
+String class represents an ‘immutable’ string
+i.e. Once an instance is created, the string it contains cannot be changed
+To change the string referenced by a String variable, you throw away the old string & replace it with the modified one (which in effect is a new String).
+
+
+
+
+
+
+Java library contains a predefined class called String.
+The String type is not a primitive type
+But it is so important, that in certain areas Java treats it like one.
+  E.g. The ability to declare String literals instead of using new to instantiate a copy of the class
+E.g.  String s = “Hello”;
+
+
+
+Java people realized the importance of the String and hence defined a String class which acts very much like a built-in datatype though it is an ADT.
+
+
+

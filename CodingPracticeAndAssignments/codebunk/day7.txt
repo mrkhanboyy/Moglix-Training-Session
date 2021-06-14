@@ -1,0 +1,915 @@
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+
+// Extend HttpServlet class
+public class HelloWorld extends HttpServlet {
+ 
+  private String message;
+
+  public void init() throws ServletException
+  {
+      // Do required initialization
+      message = "Hello World";
+  }
+
+  public void doGet(HttpServletRequest request,
+                    HttpServletResponse response)
+            throws ServletException, IOException
+  {
+      // Set response content type
+      response.setContentType("text/html");
+
+      // Actual logic goes here.
+      PrintWriter out = response.getWriter();
+      out.println("<h1>" + message + "</h1>");
+  }
+  
+  public void destroy()
+  {
+      // do nothing.
+  }
+}
+
+
+
+
+import java.io.IOException;
+        import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+public class ServletLifeCycleExample extends HttpServlet {
+    private int count;
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        getServletContext().log("init() called");
+        count = 0;
+    }
+     @Override
+    protected void service(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        getServletContext().log("service() called");
+        count++;
+        response.getWriter().write("Incrementing the count: count = " + count);
+    }
+     @Override
+    public void destroy() {
+        getServletContext().log("destroy() called");
+    }
+}
+
+
+
+
+
+The notion of servlet context is closely associated with the notion of a web application
+The interface javax.servlet.ServletContext allows servlets in an application to share data
+Using ServletContext object, a servlet can log events, obtain URL references to resources, and store attributes that other servlets in the context can access
+
+
+
+
+By making use of ServletConfig object servlet can get the configuration environment in which it is working
+The Servlet API provides various means of accessing the ServletConfig object associated with the servlet
+ServletConfig provides access to certain initialization parameters that can be configured while deploying the servlet
+
+
+
+
+service ( ) :
+Serving the client requests
+Delegation of requests to appropriate methods
+destroy ( ) is called at servlet unloading
+Free the resources and do cleanup tasks
+Make state persistent 
+SingleThreadModel : Tag interface to indicate that the service method will not be executed concurrently by two threads, This interface is deprecated from servlet specification 2.3
+
+    
+    
+
+
+The init ( ) method :
+Called by server on loading of the servlet
+Called before the servlet handles it’s first request
+Accepts a ServletConfig object that contains the initialization parameters
+If overridden, must call super.init( config ) first
+e.g. A counter for servlet calls
+
+
+
+
+
+package com.training.org;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class Login extends HttpServlet{
+	private String message;
+	ServletConfig config;
+	
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+		this.config=config;
+		System.out.println("Init is called"+getServletInfo()+" config"+config);
+		message="Login Page";
+	}
+
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+		String title="USing get method";
+		String doType="<!DOCTYPE html>";
+		PrintWriter out=resp.getWriter();
+		out.println("<!DOCTYPE html>\r\n" + 
+				"<html>\r\n" + 
+				"<head>\r\n" + 
+				"	<title></title>\r\n" + 
+				"</head>\r\n" + 
+				"<body>\r\n" + 
+				"\r\n" + 
+				"	<ul>\r\n" + 
+				"		<li>"+req.getParameter("first_name")
+				+ "</li>\r\n" + 
+				"		<li>"+req.getParameter("last_name")
+				+ "</li>\r\n" + 
+				"\r\n" + 
+				"</ul>\r\n" + 
+				"\r\n" + 
+				"\r\n" + 
+				"\r\n" + 
+				"</body>\r\n" + 
+				"</html>");
+		
+		
+		System.out.println("doGet is called");
+		resp.setContentType("text/html");
+//		PrintWriter out=resp.getWriter();
+		out.println("<h1>Login Page</h1>");
+		out.println("<h1>"+message+"</h1>");
+	}
+
+	public String getSevletInfo() {
+		return "SBM Cpywrites 2021";
+	}
+	
+	
+	@Override
+	public void destroy() {
+		System.out.println("destroy is called");
+		
+	}
+	
+}
+
+
+
+
+
+
+Allows the user to pass information to the server
+All parameter information is stored in the body of the request rather than in the URL, which provides for more privacy 
+No set limit on the amount of information that can be passed as there is with the parameter passing of a GET
+A POST is typically generated by the browser in response to a click on a Submit button on an HTML form that declares the POST method
+POST /login.html HTTP/1.1
+User-Agent: Mozilla/4.50 [en] (WinNT; I)
+Accept: image/gif, image/jpeg
+Content-Length: 34
+CRLF
+user=mark&password=secret
+
+
+
+
+
+Most common method used to request a read only resource from the server, such as a static HTML page
+May contain a If-Modified-Since header field, in which case it becomes a conditional GET, only if the target has been modified since the datestamp in the If-Modified-Since field
+Parameters are stored in the URL itself:
+GET /index.html?user=mark&password=secret HTTP/1.0
+GET method is used to send form data,results from a database query, etc
+The information is appended to URL
+The total length of characters in GET method is confined to 240 characters only, by some servers
+
+
+
+Content Type is also known as MIME (Multipurpose internet Mail Extension) Type. It is a HTTP header that provides the description about what are you sending to the browser.
+There are many content types:
+text/html
+text/plain
+application/msword
+application/vnd.ms-excel
+application/jar
+application/pdf
+application/octet-stream
+application/x-zip
+images/jpeg
+video/quicktime etc.
+
+
+
+
+
+
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+
+	<form action="/ServletExample/HelloWorld">
+		<input type="submit" value="Click for HElloWorld">
+	</form>
+    
+    
+    
+
+	<form action="/ServletExample/login">
+	
+		Enter your first Name<input type="text" name="first_name"> <br>
+		Enter your last Name <input type="text" name="last_name"> <br>
+	
+		<input type="submit" value="Click for Login">
+	</form>
+</body>
+</html>
+
+
+
+
+
+package com.training.org;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class Login extends HttpServlet{
+	private String message;
+	
+	@Override
+	public void init() throws ServletException {
+		System.out.println("Init is called");
+		message="Login Page";
+	}
+
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+		String title="USing get method";
+		String doType="<!DOCTYPE html>";
+		PrintWriter out=resp.getWriter();
+		out.println("<!DOCTYPE html>\r\n" + 
+				"<html>\r\n" + 
+				"<head>\r\n" + 
+				"	<title></title>\r\n" + 
+				"</head>\r\n" + 
+				"<body>\r\n" + 
+				"\r\n" + 
+				"	<ul>\r\n" + 
+				"		<li>"+req.getParameter("first_name")
+				+ "</li>\r\n" + 
+				"		<li>"+req.getParameter("last_name")
+				+ "</li>\r\n" + 
+				"\r\n" + 
+				"</ul>\r\n" + 
+				"\r\n" + 
+				"\r\n" + 
+				"\r\n" + 
+				"</body>\r\n" + 
+				"</html>");
+		
+		
+		System.out.println("doGet is called");
+		resp.setContentType("text/html");
+//		PrintWriter out=resp.getWriter();
+		out.println("<h1>Login Page</h1>");
+		out.println("<h1>"+message+"</h1>");
+	}
+	
+	@Override
+	public void destroy() {
+		System.out.println("destroy is called");
+		
+	}
+	
+}
+
+
+
+
+
+
+
+
+package com.training.org;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class HelloWorld extends HttpServlet{
+	private String message;
+	
+	@Override
+	public void init() throws ServletException {
+		System.out.println("Init is called");
+		message="Hello world";
+	}
+
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		System.out.println("doGet is called");
+		resp.setContentType("text/html");
+		PrintWriter out=resp.getWriter();
+		out.println("<h1>"+message+"</h1>");
+	}
+	
+	@Override
+	public void destroy() {
+		System.out.println("destroy is called");
+		
+	}
+	
+}
+
+
+
+
+Request- Method Request-URI  Protocol
+	Eg. GET /index.html HTTP/1.1
+Response- Protocol Status-Code Description
+Eg. HTTP/1.1 200 OK
+Every response contains a status code.  Common ones are:
+100 level:  Informational
+200 level:  Success (200 == OK)
+300 level:  Redirection
+400 level:  Client Error (401 == BAD REQUEST)
+500 level:  Server Error (503 == SERVICE UNAVAILABLE)
+
+    
+    
+
+Discrete connections
+Server closes TCP/IP socket connection after processing a client request
+Client can also close a connection
+eg:  Pressing the Back or Forward button in a browser
+Each client request is handled in a discrete connection
+Features of Stateless Connections:
+server can accommodate a number of clients exceeding the number of server threads (http:// versus ftp:// --> sorry, limit of 100 ftp users!)
+No server overhead associated with tracking client sessions between connections
+Keep-Alive specification default in HTTP/1.1
+
+
+
+
+
+URL- Protocol   Servername   filepath
+http (default port)
+default port 80
+https (default secure port)
+default port 443 (HTTP on SSL)
+HTTP runs on top of TCP/IP protocol
+First specified in 1990 
+Current version is HTTP/1.1
+Absolute and Relative Paths (absolute off context root)
+
+
+
+
+
+<%@ taglib prefix="ex" uri="WEB-INF/Custom.tld" %>
+<ex:MyTag/>
+
+    
+    
+
+
+package demotest;
+
+import java.io.IOException;
+
+import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.tagext.SimpleTagSupport;
+
+public class MyTag extends SimpleTagSupport{
+	public void doTag() throws IOException {
+		JspWriter out=getJspContext().getOut();
+		out.println("--DataObject--");
+		out.println("My Custom tag");
+	}
+
+}
+
+
+
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<taglib version="2.1" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd">
+	<tlib-version>1.0</tlib-version>
+	<short-name>MyTLD</short-name>
+	<tag>
+		<name>MyTag</name>
+		<tag-class>demotest.MyTag</tag-class>
+		<body-content>empty</body-content>
+	</tag>
+</taglib>
+
+
+
+
+
+
+package action;
+
+public class TestBean {
+	private String message="Default message";
+	
+	public String getMessage() {
+		System.out.println("getMessage is called");
+		return message;
+	}
+	public void setMessage(String message) {
+		System.out.println("setMessage is called");
+		this.message=message;
+	}
+}
+
+
+
+
+<center>
+<jsp:useBean id="test" class="action.TestBean"/>
+<jsp:setProperty name="test" property="message" value="Hello JSP...."/>
+
+
+<p>GET MESSAGE</p>
+<jsp:getProperty name="test" property="message"/>
+
+</center>
+
+
+
+
+
+
+
+
+
+
+
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<%@page import="java.sql.*,java.util.*"%>
+
+
+Welcome to the Web site. 
+<%@ include file = "Counter.jsp" %>
+<br> Thank you for visiting number of times.
+
+<%
+	String id = request.getParameter("id");
+String age = request.getParameter("age");
+String first = request.getParameter("first");
+String last = request.getParameter("last");
+
+try {
+	Class.forName("com.mysql.jdbc.Driver");
+	Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "shital@123");
+	Statement st = conn.createStatement();
+
+	int i = st.executeUpdate("insert into employees values('" + id + "','" + age + "','" + first + "','" + last + "')");
+	out.println("Data is successfully inserted!");
+} catch (Exception e) {
+	System.out.print(e);
+	e.printStackTrace();
+}
+%>
+
+
+
+
+
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<h1>Counter .jsp page</h1>
+
+<%!   int counter = 0 ;   %>
+<H3> Your visit to the site  :  </H3>  <%= ++counter %>
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+https://quizizz.com/join?gc=484481
+    
+    
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>INDEX PAGE</h1>
+
+
+	<!DOCTYPE html>
+<html>
+<body>
+	<form method="post" action="process.jsp">
+		id:<br> <input type="text" name="id"> <br> age<br>
+		<input type="text" name="age"> <br> first<br> <input
+			type="text" name="first"> <br> last<br> <input
+			type="text" name="last"> <br> <br> <input
+			type="submit" value="submit">
+	</form>
+</body>
+</html>
+
+<form action="welcome.jsp" method="">
+	<input type="submit" value="INSERT SINGLE RECORDS" />
+</form>
+
+<form action="selectRecords.jsp">
+	<input type="submit" value="SELECT RECORDS">
+</form>
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<%@page import="java.sql.*,java.util.*"%>
+
+<%
+	String id = request.getParameter("id");
+String age = request.getParameter("age");
+String first = request.getParameter("first");
+String last = request.getParameter("last");
+
+try {
+	Class.forName("com.mysql.jdbc.Driver");
+	Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "shital@123");
+	Statement st = conn.createStatement();
+
+	int i = st.executeUpdate("insert into employees values('" + id + "','" + age + "','" + first + "','" + last + "')");
+	out.println("Data is successfully inserted!");
+} catch (Exception e) {
+	System.out.print(e);
+	e.printStackTrace();
+}
+%>
+
+
+
+
+
+
+
+INSERT INTO user VALUES (1, 'user1')
+
+
+
+
+create table user(
+Emp_id int NOT NULL,
+Emp_name varchar(11),
+           );
+
+
+
+
+
+<%@ page import="java.io.*,java.util.*,java.sql.*" %>
+<%@ page import="javax.servlet.http.*,javax.servlet.*" %>
+
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<sql:setDataSource var="snapshot" driver="com.mysql.jdbc.Driver"
+		url="jdbc:mysql://localhost/example" user="root" password="shital@123" />
+
+	<sql:query dataSource="${snapshot}" var="result">
+	SELECT * from user;
+</sql:query>
+
+	<table border="4px" width="100%">
+		<tr>
+			<th>Id</th>
+			<th>First Name</th>
+			<th>LastName</th>
+			<th>Mobile</th>
+			<th>Email</th>
+
+		</tr>
+
+		<c:forEach var="row" items="${result.rows}">
+			<tr>
+				<td><c:out value="${row.id}" /></td>
+				<td><c:out value="${row.first_name}" /></td>
+				<td><c:out value="${row.last_name}" /></td>
+				<td><c:out value="${row.mobile}" /></td>
+				<td><c:out value="${row.email}" /></td>
+
+
+
+
+			</tr>
+		</c:forEach>
+
+
+
+
+
+
+	</table>
+
+</body>
+</html>
+
+
+
+
+
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+
+	<%@ page import="java.sql.*"%>
+	<%
+	Class.forName("com.mysql.jdbc.Driver");
+	Connection con = DriverManager.getConnection("jdbc:mysql://localhost/example", "root", "shital@123");
+	Statement stmt = con.createStatement();
+	stmt.executeUpdate("insert into user values(2,'Tanish','Madake','456777','tanish@gmail.com')");
+	out.println("One record inserted");
+	stmt.close();
+	con.close();
+	%>
+
+
+</body>
+</html>
+
+
+
+
+https://o7planning.org/10105/install-windowbuilder-for-eclipse
+    
+    
+    
+
+
+http://download.eclipse.org/windowsbuilder/WB/release/R201506241200-1/4.5/
+    
+    
+    
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<%
+		String name = request.getParameter("uname");
+	if (name.equals("tanish")) {
+	%>
+	<jsp:forward page="success.html" />
+	<%
+		} else
+	%>
+	<jsp:forward page="failure.html" />
+	<%
+	
+	%>
+
+</body>
+</html>
+
+
+
+
+
+
+<BODY>
+<%@ page contentType="application/vnd.ms-excel" %>
+<CENTER>
+<H2> Computing Apples and Oranges </H2>
+
+<TABLE BORDER = 1>
+
+<TR>  <TH>  Period           <TH> Apples <TH>  Oranges
+
+<TR>  <TH>  First Quarter    <TD> 4326   <TD> 3498
+<TR>  <TH>  Second Quarter   <TD> 6567   <TD> 3368
+<TR>  <TH>  Third Quarter    <TD> 4367   <TD> 3419
+<TR>  <TH>  Fourth Quarter   <TD> 4130   <TD> 9408
+
+</TABLE>
+</CENTER>
+</BODY>
+
+
+
+
+
+
+<body>
+
+            <h1> Hello 1</h1>
+<%
+for(int i = 0 ; i < 10; i++)
+{
+      out.println("Iteration: " + i + "<br>");
+}
+%>
+            <h1> Hello 2</h1>
+
+</body>
+
+
+
+
+<BODY>
+<% response.setHeader("refresh","5"); %>
+<%@ page import = "java.util.*"   %>
+<%  Date d = new Date( ) ;   %>
+Time Particulars: <BR>  <BR>
+Hours: <%=  d.getHours( )   %>   <BR>
+Minutes: <%=   d.getMinutes( )   %>   <BR>
+Seconds: <%=  d.getSeconds( )   %> 
+</BODY>
+
+
+
+
+
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<%! int getValue(){
+		
+		return 100;
+		
+	} %>
+
+	<h1>WELCOME .jsp Page</h1>
+	Current Time
+	<%=java.util.Calendar.getInstance().getTime()%>
+	<%
+		String name = request.getParameter("uname");
+	if (name.equals("tanish")) {
+		out.println("Welcome " + name);
+	} else
+		out.println("Thank you new user");
+	%>
+	
+	<%= "Value is "+getValue() %>
+
+
+</body>
+</html>
+
+
+
+
+
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+
+<h1>WELCOME .jsp Page</h1>
+<%
+
+	String name=request.getParameter("uname");
+	out.println("Welcome "+name);
+
+%>
+
+
+</body>
+</html>
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>INDEX PAGE</h1>
+	
+	<form action="welcome.jsp" method="post">
+	Enter your name <input type="text" name="uname">
+	<input type="submit" value="CLICK ME"/>
+	
+	</form>
+</body>
+</html>
+
+
+
+
+
+Three types of predefined tags:
+Directives
+Scripting Elements
+Actions
+Custom tags
+
+
+
+
+
+
+
+Java code embedded in HTML code
+More HTML code and less java code
+Simplify the dynamic presentation layer in a multi-tiered architecture
+Separate presentation and business logic
+Template based content generation-JSP
+Programmatic content generation-Servlets
+
+
+
+
+
+

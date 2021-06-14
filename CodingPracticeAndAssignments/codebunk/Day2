@@ -1,0 +1,1512 @@
+
+codebunk : https://codebunk.com/b/3101100284487/
+
+
+
+
+--------------------------------------------------------------------------------------------
+Major pillars
+
+	encapsulation
+	abstraction
+	polymorphism
+	inheritance
+
+Minor pillars
+
+	concurrency
+	persistance
+	strongly type casting
+
+
+
+object based only supports encapsulation and abstraction
+
+--------------------------------------------------------------------------------------------
+
+
+1 . What is a class?
+2 . What is an object?
+3 . What is state of an object?
+4 . What is behavior of an object?
+5 . What is the super class of every class in Java?
+6 . Explain about toString method ?
+7 . What is the use of equals method in Java?
+8 . What are the important things to consider when implementing equals method?
+9 . What is the Hashcode method used for in Java?
+10 . Explain inheritance with examples .
+11 . What is method overloading?
+12 . What is method overriding?
+13 . Can super class reference variable can hold an object of sub class?
+14 . Is multiple inheritance allowed in Java?
+15 . What is an interface?
+16 . How do you define an interface?
+17 . How do you implement an interface?
+18 . Can you explain a few tricky things about interfaces?
+19 . Can you extend an interface?
+20 . Can a class extend multiple interfaces?
+21 . What is an abstract class?
+22 . When do you use an abstract class?
+23 . How do you define an abstract method?
+24 . Compare abstract class vs interface?
+25 . What is a constructor?
+26 . What is a default constructor?
+27 . Will this code compile?
+28 . How do you call a super class constructor from a constructor?
+29 . Will this code compile?
+30 . What is the use of this()?
+31 . Can a constructor be called directly from a method?
+32 . Is a super class constructor called even when there is no explicit call from a sub class constructor?
+
+
+
+
+
+
+interface MyInterface{
+	public void method1();
+	public void method2();
+}
+
+
+class Demo implements MyInterface{
+
+	@Override
+	public void method1() {
+		System.out.println("method 1 from demo");
+		
+	}
+
+	@Override
+	public void method2() {
+		System.out.println("method 2 from demo");
+		
+	}
+	
+}
+
+
+
+public class InterfaceExample {
+
+	public static void main(String[] args) {
+		Demo d1=new Demo();
+		d1.method1();
+		d1.method2();
+
+	}
+
+}
+
+
+
+
+
+
+
+Interfaces are used for
+Expanding the scope for polymorphism.
+Achieving multiple inheritance as interface adds to the type of the class.
+Implementing callback methods.
+
+
+
+The concept of inheritance should be explained in terms of behavioral need rather than just reusability.
+For example, reusability can also be achieved through Containment; then why should one go for Inheritance?
+There is a grave need for an object to behave like other object to get some advantages through the way of polymorphism hence
+Inheritance.  
+
+
+
+To overcome the lack of multiple inheritance Java uses ‘INTERFACE INHERITANCE’.
+Interface is  essentially a collection of constants & abstract methods.
+The interface approach is sometimes known as “programming by contract”. 
+An interface is used via the keyword ‘implements’. Thus a class can be declared as 
+class MyClass implements Sun, Fun{
+...
+}
+
+
+The sub-class inherits all the code available in the super class.
+Useful for reusability of code.
+Problem arises when multiple inheritance has to be achieved .
+Multiple Inheritance is inherently ambiguous.
+Java does not support multiple inheritance. 
+Java supports a single chain of implementation inheritance.
+
+
+
+
+----------------------------------------------------
+
+abstract class Shape{
+	String color;
+	abstract double area();
+	public abstract String toString();
+	
+	public Shape(String color) {
+		System.out.println("Shape constructor is called");
+		this.color=color;
+		
+	}
+	
+	public String getColor() {
+		return color;
+		
+	}
+}
+
+
+
+class Circle extends Shape{
+
+	double radious;
+	
+	public Circle(String color,double radious) {
+		super(color);
+		System.out.println("Circle is called");
+		this.radious=radious;
+	}
+	
+	@Override
+	double area() {
+		
+		return Math.PI * Math.pow(radious,2);
+	}
+
+	@Override
+	public String toString() {
+		
+		return "Circle color is"+super.getColor()+"And area is "+area();
+	}
+	
+}
+
+
+
+
+public class AbstractClassExample {
+	
+	public static void main(String[] args) {
+	
+		Shape s1=new Circle("Red",2.2);
+		System.out.println(s1);
+		
+		
+	}
+
+}
+
+
+---------------------------------------------------------------------------------------------
+
+
+
+
+abstract class Animal{
+	
+	public abstract void animalSound(); //unimplemented method
+
+	
+	public void sleep() {    	//implemented method
+		System.out.println("Slip method from Animal Abstract class");
+	}
+}
+
+
+class Tiger extends Animal{
+
+	@Override
+	public void animalSound() {
+		System.out.println("Animal sound from Tiger class");
+		
+	}
+	
+}
+
+
+public class AbstractClassExample {
+	
+	public static void main(String[] args) {
+		Animal a=new Tiger();
+		a.animalSound();
+		a.sleep();
+		
+	}
+
+    
+    
+    
+    
+    
+
+
+
+abstract class Animal{
+	
+	public abstract void animalSound(); //unimplemented method
+
+	
+	public void sleep() {    	//implemented method
+		System.out.println("Slip method from Animal Abstract class");
+	}
+}
+
+
+public class AbstractClassExample {
+	
+	public static void main(String[] args) {
+		Animal a=new Animal();
+		
+	}
+
+}
+
+
+
+
+
+
+Example of Abstract class – Shape Hierarchy –
+You have two hierarchies :  Point-Circle-Cylinder and Line-Square-Cube
+Here common method is area() – if I create an array that contains the objects of all these classes. How can I do it generically ?  Can Point p = new Line() be valid ? of course not, no inheritance !!!!
+So I force a super class Shape which would contain the method area(). Now what implementation I am going to write in that method. I don’t know, at runtime whose area() is going to be called. So the information that I don’t know I put it as “abstract”.
+ 
+Important points about abstract class :
+You cannot create object of abstract class : why ?
+	the class might be too generic so it might have many methods for which there is no implementation. So if an object is created  out of such a class and the object invokes the abstract methods it will be disastrous at run time.
+2.An abstract class can contain concrete methods.
+3.An abstract class may not contain any abstract methods.
+4. In Java a pure virtual method is called as abstract method.
+ 
+abstract class Shape{
+public abstract float area(); 
+}
+
+
+
+
+
+
+
+Abstract class is a facility to collect generic / common features into a single super class.
+Abstract class’s one or more methods are declared but not defined.
+Advantages 
+Useful to achieve polymorphism.
+Helps to create base classes that are generic and implementation is not available.
+
+
+
+
+
+
+
+			//calculating an area 
+
+
+class circle
+{
+	void calarea(float p,float q)
+	{
+		float cir;
+		System.out.println("value of p "+p);
+		System.out.println("value of q "+q);
+		cir=p*q*q;
+		System.out.println("area of circle="+cir);
+	}
+	
+	void calarea(int l,int b)
+	{
+		int r;
+		r=l*b;
+		System.out.println("value of l="+l);
+		System.out.println("value of b="+b);
+	
+		System.out.println("area of rectangle="+r);
+		
+	}
+}
+
+
+
+class calculate
+{
+	public static void main(String[] args)
+	{
+		circle c1=new circle();
+		float a=3.12f;
+		int b=10;
+		c1.calarea(a,b);
+		int x=20,y=30;
+		c1.calarea(x,y);
+		
+	}
+}
+
+
+
+
+
+
+			//method overloading
+
+class simpleadd
+{
+	void add(int a,int b)
+	{
+		int c;
+		c=a+b;
+		System.out.println("sum="+c);			
+	}
+	void add(float a,float b)
+	{
+		float c;
+		c=a+b;
+		System.out.println("sum="+c);		
+	}
+	void add(double a,double b)
+	{
+		double c;
+		c=a+b;
+		System.out.println("sum="+c);		
+	}
+}
+
+class simple
+{
+	public static void main(String[] args)
+	{
+		simpleadd c1=new simpleadd();
+		int a=10,b=20;
+		float x=10.5f,y=20.3f;
+		double x1=10.50,y1=20.50;
+		
+		c1.add(a,b);
+		c1.add(x,y);
+		c1.add(x1,y1);
+		
+		
+	}
+	
+}
+
+
+
+
+
+
+package com.training.org;
+
+class Machine{
+	public void start() {
+		System.out.println("Machine is started");
+	}
+}
+
+
+class Laptop extends Machine{
+	@Override
+	public void start() {
+		System.out.println("Laptop is started");
+	}
+	
+	public void stop() {
+		System.out.println("Laptop is stopped");
+	}
+}
+
+
+
+public class MethodOverridingExample {
+	public static void main(String[] args) {
+		Machine machine=new Machine();
+		machine.start();
+		
+		Laptop laptop=new Laptop();
+		laptop.start();
+		laptop.stop();
+		
+		
+		Machine machine1=new Machine();
+		Laptop laptop1=(Laptop)machine1;
+		
+		
+		
+		
+		
+		
+		
+	}
+}
+
+
+
+
+
+Method Overriding happens between inherited classes.
+Overriding enables to provide a different behavior for an object without changing method signature.
+Signatures of overridden method should be identical to that of super class
+
+
+
+
+
+
+
+Method Overloading happens in the same class.
+Handy for program design, because you don’t have to keep track of a bunch of different method names.
+Signatures of overloaded method should be different.
+
+
+
+
+
+Consider the hierarchy
+Employee<------Manager<-----SalesManager getSalary() is overridden.
+The code Employee a = new Employee();
+ a. getSalary() will call Employee’s getSalary() 
+The code Manager b = new Manager();
+ b. getSalary() will call Manager’s       	getSalary()
+The code SalesManager c = new SalesManager();
+ c. getSalary() will call SalesManager’s getSalary()
+
+    
+    
+    
+
+Overriding is directly related to sub classing.
+Overriding is required to modify the behavior of a super class’s method to suit the new sub class.
+Overriding methods should have arg lists  of identical type & order – else they are simply treated as overloaded methods.
+Return types of overridden methods should be of same type ; else compiler complains.
+
+
+
+static polymorphism is achieved by Method overloading in Java.
+
+Dynamic polymorphism is achieved using Method overriding in an inheritance.
+
+
+
+Polymorphism involves same method names having different implementations.
+Polymorphism support resolves the method call to suitable implementation.
+Polymorphism allows to design & implement systems that are more easily extensible and maintainable.
+
+
+
+
+
+
+class Parent{
+	String name;
+	public void method() {
+		System.out.println("Method of Parent");
+	}
+}
+
+
+
+class Child extends Parent{
+	int id;
+	@Override
+	public void method() {
+		System.out.println("MEthod from Child");
+	}
+}
+
+
+
+public class MethodOverridingExample {
+	
+	public static void main(String[] args) {
+		Parent p=new Child();
+		p.name="Tanish";
+		
+		System.out.println(p.name);
+		p.method();
+		
+		
+		Child c=(Child)p;
+		c.id=101;
+		System.out.println(c.name);
+		c.method();
+		
+		
+	}
+}
+
+
+
+
+
+
+class Parent{
+	public Parent() {
+		System.out.println("Parent constructor is called");
+	}
+	
+	public void printData() {
+		System.out.println("Parent -> PrintData ");
+	}
+}
+
+
+class Child extends Parent{
+	public Child() {
+		System.out.println("Child is called");
+	}
+	
+
+	public void printData() {
+		System.out.println("Child -> PrintData ");
+	}
+}
+
+
+
+
+
+public class MethodOverridingExample {
+
+	public static void main(String[] args) {
+//		Parent o1=new  Parent();
+//		o1.printData();
+//		
+		
+		Parent o2=new Child();
+		o2.printData();
+		
+//		
+//		Child o3=new Child();
+//		o3.printData();
+//		
+		
+
+	}
+
+}
+
+
+
+
+
+class Parent{
+	public Parent() {
+		System.out.println("Parent constructor is called");
+	}
+	
+	public void printData() {
+		System.out.println("Parent -> PrintData ");
+	}
+}
+
+
+class Child extends Parent{
+	public Child() {
+		System.out.println("Child is called");
+	}
+	
+
+	public void printData() {
+		System.out.println("Child -> PrintData ");
+	}
+}
+
+
+
+
+
+public class MethodOverridingExample {
+
+	public static void main(String[] args) {
+		Parent o1=new  Parent();
+		o1.printData();
+		
+		
+		Parent o2=new Child();
+		o2.printData();
+		
+		
+
+	}
+
+}
+
+
+
+
+
+package com.training.org;
+
+class Abc{
+	public Abc() {
+		System.out.println("Abc is called");
+	}
+	public void show() {
+		System.out.println("show method from Abc");
+		
+	}
+}
+
+class Xyz extends Abc{
+	public Xyz() {
+		System.out.println("Xyz is called");
+	}
+	
+//	public void show() {
+//		System.out.println("show method from Xyz");
+//	}
+	
+}
+
+
+public class MethodOverridingExample {
+
+	public static void main(String[] args) {
+		Xyz x=new Xyz();
+		x.show();
+
+	}
+
+}
+
+
+
+
+
+
+public class MethodOverloading {
+	
+	
+	public void addition() {
+		
+	}
+	
+	
+	public void addition(int a,int b) {
+		
+	}
+	
+	public void addition(int a,int b,int c) {
+		
+	}
+	
+	public void addition(float a,float b) {
+		
+	}
+	
+	public void addition(double a,double b) {
+	
+		
+	}
+	
+	
+	public void addition(int a,float b) {
+		
+	}
+	
+	public void addition(float a,int b) {
+		
+	}
+	
+	
+	public static void main(String[] args) {
+		
+	}
+
+}
+
+
+
+
+
+
+Super Keyword refers to super class.
+Super allows to pass control to a constructor in the parent class.
+Every constructor must invoke the constructor of super class.
+If constructor is not invoked explicitly, super class uses its default constructor.
+If there’s no default constructor in super class, compiler complains.
+Super must be the first statement in the sub class’s constructor.
+
+
+
+
+
+
+sales<5000
+comm = 2% on basicSalary
+
+
+sales>=5000 & <7000
+comm=5% on basicSalary
+
+
+sales>=7000 & <10000
+comm=7% on basicSalary
+
+sales>=10000
+comm=10% on basicSalary
+
+
+netSalary=basicSalary+comm
+
+
+
+
+
+
+https://quizizz.com/join?gc=604076
+    
+    
+
+package com.training.org;
+
+public class MainClass {
+
+	public static void main(String[] args) {
+		
+		SalesEmployee s1=new SalesEmployee(101,"TAnish",10000,5000);
+		System.out.println(s1);
+		
+
+	}
+
+}
+
+
+
+
+
+
+
+
+package com.training.org;
+
+public class SalesEmployee extends Employee{
+	
+	private int sales;
+	private double netSalary;
+	
+	
+	public SalesEmployee() {
+		super();
+		System.out.println("Default constructor of SalesEmployee is called");
+		sales=0;
+		netSalary=0;
+	}
+
+
+	public SalesEmployee(int empId,String name,double basicSalary,int sales) {
+		super(empId,name,basicSalary);
+		System.out.println("Parameterised constructor of SalesEmployee is called");
+		this.sales = sales;
+		this.netSalary = 0;
+	}
+
+
+	@Override
+	public String toString() {
+		
+		return super.toString()+"\nSalesEmployee [sales=" + sales + ", netSalary=" + netSalary + "]";
+	}
+	
+}
+
+
+
+package com.training.org;
+
+public class Employee {
+	private int empId;
+	private String name;
+	private double basicSalary;
+	
+	
+	public Employee() {
+		System.out.println("Default constructor of Employee is called");
+		empId=0;
+		name="";
+		basicSalary=0;
+	}
+
+
+	public Employee(int empId, String name, double basicSalary) {
+		System.out.println("Parameterised constructor of Employee is called");
+		this.empId = empId;
+		this.name = name;
+        
+        
+		this.basicSalary = basicSalary;
+	}
+
+
+	@Override
+	public String toString() {
+		return "Employee [empId=" + empId + ", name=" + name + ", basicSalary=" + basicSalary + "]";
+	}
+
+}
+
+
+
+
+
+
+package com.training.rog;
+
+public class MainClass {
+
+	public static void main(String[] args) {
+//		BaseClass b1=new BaseClass();
+//		b1.showBaseValues();
+//		
+		
+		DerivedClass d1=new DerivedClass(100,200);
+		d1.showBaseValues();
+		d1.showDerivedValues();
+
+	}
+
+}
+
+
+
+
+
+
+package com.training.rog;
+
+public class DerivedClass extends BaseClass{
+
+	private int derivedValue;
+	
+	public DerivedClass() {
+		System.out.println("Default constructor of Derived class is called");
+		derivedValue=0;
+	}
+	
+	public DerivedClass(int baseValue,int derivedValue) {
+		super(baseValue);
+		System.out.println("Parameterised constructor of Derived class is called");
+		this.derivedValue=derivedValue;
+	}
+	
+	
+	public void showDerivedValues() {
+		System.out.println("derivedVAlues "+derivedValue);
+	}
+}
+
+
+
+
+
+
+
+
+package com.training.rog;
+
+public class DerivedClass {
+
+	private int derivedValue;
+	
+	public DerivedClass() {
+		System.out.println("Default constructor of Derived class is called");
+		derivedValue=0;
+	}
+	
+	public DerivedClass(int derivedValue) {
+		System.out.println("Parameterised constructor of Derived class is called");
+		this.derivedValue=derivedValue;
+	}
+	
+	
+	public void showDerivedValues() {
+		System.out.println("derivedVAlues "+derivedValue);
+	}
+}
+
+
+
+
+
+
+
+
+package com.training.rog;
+
+public class BaseClass {
+	
+	private int baseValue;
+	
+	public BaseClass() {
+		System.out.println("Default constructor of BaseClass is called");
+		baseValue=0;
+	}
+
+	public BaseClass(int baseValue) {
+		System.out.println("Parameterised constructor of BaseClass is called");
+		this.baseValue = baseValue;
+	}
+	
+	
+	public void showBaseValues() {
+		System.out.println("Base values"+baseValue);
+	}
+
+}
+
+
+
+
+
+
+package com.training.org;
+
+import java.util.ArrayList;
+
+public class OrderDetails {
+	
+	private String custName;
+	private String custAddress;
+	private ArrayList<String> custProducts;
+	private double billAmount;
+	
+	
+
+
+	public OrderDetails() {
+		System.out.println("Default constructor is called");
+		custName="";
+		custAddress="";
+		custProducts=new ArrayList<String>();
+		billAmount=0;
+	}
+
+	public OrderDetails(String custName, String custAddress, ArrayList<String> custProducts) {
+		System.out.println("Parameterised constructor is called");
+		this.custName = custName;
+		this.custAddress = custAddress;
+		this.custProducts = custProducts;
+		this.billAmount =0;
+	}
+
+	
+	public void generateBillAmount() {
+		billAmount=1034.345;
+	}
+
+	@Override
+	public String toString() {
+		return "OrderDetails [custName=" + custName + ", custAddress=" + custAddress + ", custProducts=" + custProducts
+				+ ", billAmount=" + billAmount + "]";
+	}
+
+	public static void main(String[] args) {
+		
+		
+		OrderDetails o1=new OrderDetails();
+		System.out.println(o1);
+		
+		ArrayList<String> orderColl=new ArrayList<String>();
+		orderColl.add("Milk 1 ltr");
+		orderColl.add("Salt 1 pkt");
+		orderColl.add("Aata 10 kg");
+		orderColl.add("Onion 10kg");
+		
+		
+		
+		
+		OrderDetails o2=new OrderDetails("TAnish Mishra","Mumbai",orderColl);
+		o2.generateBillAmount();
+		System.out.println(o2);
+		
+		
+		
+
+	}
+
+}
+
+
+
+
+
+
+
+package com.training.org;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Student {
+
+	private int stdId;
+	private String stdName;
+	private String course;
+	private int marks;
+
+	public Student() {
+		System.out.println("Default constructor of student is called");
+		stdId=0;
+		stdName="";
+		course="";
+		marks=0;
+	}
+
+	public Student(int stdId,String stdName,String course,int marks) {
+		System.out.println("Parameterised constructor of Student is called");
+		this.stdId=stdId;
+		this.stdName=stdName;
+		this.course=course;
+		this.marks=marks;
+	}
+
+	public int getMarks() {
+		return marks;
+	}
+
+
+	public void setMarks(int marks) {
+		this.marks = marks;
+	}
+
+
+	public void acceptValues() {
+		Scanner input=new Scanner(System.in);
+		System.out.println("Enter stdId");
+		stdId=Integer.parseInt(input.nextLine());
+
+
+		System.out.println("Enter your name");
+		stdName=input.nextLine();
+
+		
+		System.out.println("Enter your course");
+		course=input.nextLine();
+
+
+		System.out.println("Enter marks");
+		marks=input.nextInt();
+
+	}
+	
+
+	@Override
+	public String toString() {
+		return "Student stdId=" + stdId + ", stdName=" + stdName + ", course=" + course + ", marks=" + marks + "";
+	}
+
+	public static void main(String[] args) {
+
+		ArrayList<Student> stdList=new ArrayList<>();
+
+		char ch='Y';
+		Scanner input=new Scanner(System.in);
+
+		do {
+			System.out.println("1] Add new Record\n2] Update record\n3] Delete record\n4] Display records\n\nEnter your choice\n");
+			int choice=input.nextInt();
+
+			switch(choice) {
+
+			case 1:
+				Student s1=new Student();
+				s1.acceptValues();
+				stdList.add(s1);
+				break;
+
+			case 2:
+				Student s2=new Student(102,"MAnu","ME",596);
+				stdList.set(1,s2);
+				break;
+
+			case 3:
+				stdList.remove(3);
+				break;
+			case 4:
+				for (Student student : stdList) {
+					System.out.println(student);
+				}
+				break;
+
+			}
+
+			System.out.println("Do you want to conti.....");
+			ch=input.next().charAt(0);
+		}while(ch=='y'||ch=='Y');
+
+	}
+}
+
+
+
+
+
+package com.training.org;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Student {
+
+	private int stdId;
+	private String stdName;
+	private String course;
+	private int marks;
+
+	public Student() {
+		System.out.println("Default constructor of student is called");
+		stdId=0;
+		stdName="";
+		course="";
+		marks=0;
+	}
+
+
+	public Student(int stdId,String stdName,String course,int marks) {
+		System.out.println("Parameterised constructor of Student is called");
+		this.stdId=stdId;
+		this.stdName=stdName;
+		this.course=course;
+		this.marks=marks;
+	}
+
+
+
+	public int getMarks() {
+		return marks;
+	}
+
+
+	public void setMarks(int marks) {
+		this.marks = marks;
+	}
+
+
+	public void acceptValues() {
+		Scanner input=new Scanner(System.in);
+		System.out.println("Enter stdId");
+		stdId=input.nextInt();
+
+		input.nextLine();
+		System.out.println("Enter your name");
+		stdName=input.nextLine();
+
+		input.nextLine();
+		System.out.println("Enter your course");
+		course=input.nextLine();
+
+
+		System.out.println("Enter marks");
+		marks=input.nextInt();
+
+	}
+	//	
+	//	public void showStudentDetails() {
+	//		System.out.println("Student Details");
+	//		System.out.println("ID "+stdId+" Name "+stdName+"Course "+course+" Marks "+marks);
+	//		
+	//	}
+	//	
+
+
+	@Override
+	public String toString() {
+		return "Student stdId=" + stdId + ", stdName=" + stdName + ", course=" + course + ", marks=" + marks + "";
+	}
+
+
+
+
+
+	public static void main(String[] args) {
+
+		ArrayList<Student> stdList=new ArrayList<>();
+
+		char ch='Y';
+		Scanner input=new Scanner(System.in);
+
+		do {
+			System.out.println("1] Add new Record\n2] Update record\n3] Delete record\n4] Display records\n\nEnter your choice\n");
+			int choice=input.nextInt();
+
+			switch(choice) {
+
+			case 1:
+				Student s1=new Student();
+				s1.acceptValues();
+				stdList.add(s1);
+				break;
+
+			case 2:
+				Student s2=new Student(102,"MAnu","ME",596);
+				stdList.set(1,s2);
+				break;
+
+			case 3:
+				stdList.remove(3);
+				break;
+			case 4:
+				for (Student student : stdList) {
+					System.out.println(student);
+				}
+				break;
+
+			}
+
+			System.out.println("Do you want to conti.....");
+			ch=input.next().charAt(0);
+		}while(ch=='y'||ch=='Y');
+
+
+
+
+
+
+
+
+
+
+
+		//		
+		//		stdList.add(new Student(101,"Tanish","BE",560));
+		//		stdList.add(new Student(102,"Manish","BE",460));
+		//		stdList.add(new Student(103,"Anish","BE",760));
+		//		stdList.add(new Student(104,"Kanish","BE",680));
+		//		stdList.add(new Student(105,"Rupesh","BE",450));
+		//		
+		//		
+		//		
+		//		for (Student student : stdList) {
+		//			System.out.println(student);
+		//		}
+		//		
+
+
+		//		
+		//		//user 1
+		//		Student s1=new Student();
+		//		//s1.showStudentDetails();
+		//		System.out.println(s1.toString());
+		//		
+		//		//user 2
+		////		
+		//		Student s2=new Student(101,"Tanish","BE",340);
+		//		System.out.println(s2.toString());
+		////		s2.showStudentDetails();
+		////		
+		////		
+		////		
+		////		//user 3
+		////		Student s3=new Student();
+		////		s3.acceptValues();
+		////		s3.setMarks(600);
+		////		s3.showStudentDetails();
+		////		
+
+	}
+
+
+}
+
+
+
+
+
+
+package com.training.org;
+
+import java.util.Scanner;
+
+public class Student {
+
+	private int stdId;
+	private String stdName;
+	private String course;
+	private int marks;
+	
+	public Student() {
+		System.out.println("Default constructor of student is called");
+		stdId=0;
+		stdName="";
+		course="";
+		marks=0;
+	}
+	
+	
+	public Student(int stdId,String stdName,String course,int marks) {
+		System.out.println("Parameterised constructor of Student is called");
+		this.stdId=stdId;
+		this.stdName=stdName;
+		this.course=course;
+		this.marks=marks;
+	}
+	
+	
+	
+	public int getMarks() {
+		return marks;
+	}
+
+
+	public void setMarks(int marks) {
+		this.marks = marks;
+	}
+
+
+	public void acceptValues() {
+		Scanner input=new Scanner(System.in);
+		System.out.println("Enter stdId");
+		stdId=input.nextInt();
+		
+		input.nextLine();
+		System.out.println("Enter your name");
+		stdName=input.nextLine();
+		
+		input.nextLine();
+		System.out.println("Enter your course");
+		course=input.nextLine();
+		
+		
+		System.out.println("Enter marks");
+		marks=input.nextInt();
+	
+	}
+//	
+//	public void showStudentDetails() {
+//		System.out.println("Student Details");
+//		System.out.println("ID "+stdId+" Name "+stdName+"Course "+course+" Marks "+marks);
+//		
+//	}
+//	
+
+
+	@Override
+	public String toString() {
+		return "Student stdId=" + stdId + ", stdName=" + stdName + ", course=" + course + ", marks=" + marks + "";
+	}
+
+	
+	
+
+
+	public static void main(String[] args) {
+	
+		
+		//user 1
+		Student s1=new Student();
+		//s1.showStudentDetails();
+		System.out.println(s1.toString());
+		
+		//user 2
+//		
+		Student s2=new Student(101,"Tanish","BE",340);
+		System.out.println(s2.toString());
+//		s2.showStudentDetails();
+//		
+//		
+//		
+//		//user 3
+//		Student s3=new Student();
+//		s3.acceptValues();
+//		s3.setMarks(600);
+//		s3.showStudentDetails();
+//		
+	
+	}
+
+
+}
+
+
+
+
+
+
+package com.training.org;
+
+import java.util.Scanner;
+
+public class Student {
+
+	private int stdId;
+	private String stdName;
+	private String course;
+	private int marks;
+	
+	public Student() {
+		System.out.println("Default constructor of student is called");
+		stdId=0;
+		stdName="";
+		course="";
+		marks=0;
+	}
+	
+	
+	public Student(int stdId,String stdName,String course,int marks) {
+		System.out.println("Parameterised constructor of Student is called");
+		this.stdId=stdId;
+		this.stdName=stdName;
+		this.course=course;
+		this.marks=marks;
+	}
+	
+	
+	
+	public void acceptValues() {
+		Scanner input=new Scanner(System.in);
+		System.out.println("Enter stdId");
+		stdId=input.nextInt();
+		
+		input.nextLine();
+		System.out.println("Enter your name");
+		stdName=input.nextLine();
+		
+		input.nextLine();
+		System.out.println("Enter your course");
+		course=input.nextLine();
+		
+		
+		System.out.println("Enter marks");
+		marks=input.nextInt();
+	
+	}
+	
+	public void showStudentDetails() {
+		System.out.println("Student Details");
+		System.out.println("ID "+stdId+" Name "+stdName+"Course "+course+" Marks "+marks);
+		
+	}
+	
+	
+	
+	
+	public static void main(String[] args) {
+	
+		
+		//user 1
+		Student s1=new Student();
+		s1.showStudentDetails();
+		
+		
+		//user 2
+		
+		Student s2=new Student(101,"Tanish","BE",340);
+		s2.showStudentDetails();
+		
+		
+		
+		//user 3
+		Student s3=new Student();
+		s3.acceptValues();
+		s3.showStudentDetails();
+		
+		
+		
+		
+		
+
+	}
+
+}
+

@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8'?>  
+<!DOCTYPE hibernate-mapping PUBLIC  
+ "-//Hibernate/Hibernate Mapping DTD 3.0//EN"  
+ "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="com.training.org.Employee" table="employee">
+		<id name="id" type="int" column="id">
+			<generator class="increment"></generator>
+		</id>
+
+		<property name="firstName" column="first_name"></property>
+		<property name="lastName" column="last_name"></property>
+		<property name="salary" column="salary"></property>
+		<many-to-one name="address" cascade="all" column="address" unique="true"
+			class="com.training.org.Address"/>
+	</class>
+
+	<class name="com.training.org.Address" table="address">
+
+		<id name="id" type="int" column="id">
+			<generator class="increment"></generator>
+		</id>
+
+		<property name="street" column="street_name" unique="true"></property>
+		<property name="city" column="city_name"></property>
+		<property name="zipCode" column="zipcode"></property>
+		
+
+
+	</class>
+
+
+</hibernate-mapping>   

@@ -1,0 +1,1189 @@
+	import java.io.DataOutputStream;
+	import java.io.IOException;
+	import java.net.Socket;
+	import java.net.UnknownHostException;
+	import java.io.*;
+	import java.net.*;
+	public class ClientCode
+	{
+	  public static void main(String[] args) throws Exception
+	  {
+	     Socket sock = new Socket("127.0.0.1", 3000);
+	                               // reading from keyboard (keyRead object)
+	     BufferedReader keyRead = new BufferedReader(new InputStreamReader(System.in));
+	                              // sending to client (pwrite object)
+	     OutputStream ostream = sock.getOutputStream(); 
+	     PrintWriter pwrite = new PrintWriter(ostream, true);
+	
+	                              // receiving from server ( receiveRead  object)
+	     InputStream istream = sock.getInputStream();
+	     BufferedReader receiveRead = new BufferedReader(new InputStreamReader(istream));
+	
+	     System.out.println("Start the chitchat, type and press Enter key");
+	
+	     String receiveMessage, sendMessage;               
+	     while(true)
+	     {
+	        sendMessage = keyRead.readLine();  // keyboard reading
+	        pwrite.println(sendMessage);       // sending to server
+	        pwrite.flush();                    // flush the data
+	        if((receiveMessage = receiveRead.readLine()) != null) //receive from server
+	        {
+	            System.out.println(receiveMessage); // displaying at DOS prompt
+	        }         
+	      }               
+	    }                    
+	}  
+    
+    
+    
+    
+    
+
+
+package com.training.org;
+
+import java.io.*;
+import java.net.*;
+public class Server
+{
+  public static void main(String[] args) throws Exception
+  {
+      ServerSocket sersock = new ServerSocket(3000);
+      System.out.println("Server  ready for chatting");
+      Socket sock = sersock.accept( );                          
+                              // reading from keyboard (keyRead object)
+      BufferedReader keyRead = new BufferedReader(new InputStreamReader(System.in));
+	                      // sending to client (pwrite object)
+      OutputStream ostream = sock.getOutputStream(); 
+      PrintWriter pwrite = new PrintWriter(ostream, true);
+
+                              // receiving from server ( receiveRead  object)
+      InputStream istream = sock.getInputStream();
+      BufferedReader receiveRead = new BufferedReader(new InputStreamReader(istream));
+
+      String receiveMessage, sendMessage;               
+      while(true)
+      {
+        if((receiveMessage = receiveRead.readLine()) != null)  
+        {
+           System.out.println(receiveMessage);         
+        }         
+        sendMessage = keyRead.readLine(); 
+        pwrite.println(sendMessage);             
+        pwrite.flush();
+      }               
+    }                    
+}       
+
+
+
+
+
+
+
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
+public class ClientCode {
+	public static void main(String[] args) throws UnknownHostException, IOException {
+		try{      
+			Socket s=new Socket("localhost",6666);  
+			DataOutputStream dout=new DataOutputStream(s.getOutputStream());  
+			dout.writeUTF("Hello Server");  
+			dout.flush();  
+			dout.close();  
+			s.close();  
+		}catch(Exception e){System.out.println(e);}  
+	}  
+}
+
+
+
+
+
+
+
+package com.training.org;
+
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+public class Server {
+
+	public static void main(String[] args) throws IOException {
+		try{  
+			ServerSocket ss=new ServerSocket(6666);  
+			Socket s=ss.accept();//establishes connection   
+			DataInputStream dis=new DataInputStream(s.getInputStream());  
+			String  str=(String)dis.readUTF();  
+			System.out.println("message= "+str);  
+			ss.close();  
+		}catch(Exception e){System.out.println(e);}  
+	}  
+
+
+}
+
+
+
+
+
+
+
+Java makes network programming easier by encapsulating connection functionality in socket classes.
+socket  related classes are grouped together in java.net package.
+
+
+
+sockets are bi-directional
+sockets are reliable
+sockets are persistent
+socket establishes point-to-point communication
+sockets are stream-based connections.
+
+
+
+
+
+
+for example      
+21 – FTP
+23 – Telnet
+25 – SMTP
+80 – HTTP	
+109 - POP
+
+
+
+
+
+
+Socket is a logical number comprising of the IP address(System identification) and the port number.
+A port number is a logical number assigned to a process. It helps to identify a process on a given system.
+Port numbers upto 1024 are reserved ports or also called as well-known ports.	
+
+
+
+
+
+package com.training.org;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Scanner;
+
+public class DatabaseOperations {
+	String url;
+	String userName;
+	String password;
+	Connection con;
+	String query;
+	public DatabaseOperations() throws SQLException {
+		System.out.println("Default constructor is called");
+		url="jdbc:mysql://localhost:3306/example";
+		userName="root";
+		password="shital@123";
+		con=DriverManager.getConnection(url,userName,password);
+		query="SELECT version()";
+	}
+
+
+	public DatabaseOperations(String url,String userName,String password,String query) throws SQLException {
+		System.out.println("Parameterised constructor is called");
+		this.url=url;
+		this.userName=userName;
+		this.password=password;
+		con=DriverManager.getConnection(url,userName,password);
+		this.query=query;
+	}
+
+	public void createDatabase(String name) throws SQLException {
+		Statement s1=con.createStatement();
+		s1.executeUpdate(name);
+		System.out.println("Database created ");
+
+	}
+	public static void main(String[] args) throws SQLException {
+
+
+
+		int choice;
+		DatabaseOperations db=new DatabaseOperations();
+		Scanner input=new Scanner(System.in);
+		System.out.println("1] Create database\n2] Create table\n3] Insert data \n4] Update data\n\5] Delete record\n");
+		choice=input.nextInt();
+		switch(choice) {
+		case 1:
+			System.out.println("Enter database name");
+			String name=input.nextLine();
+			db.createDatabase("create database mydbjava");
+
+			break;
+
+		case 2:
+
+		case 3:
+
+		}
+	}
+}
+
+
+
+
+
+
+package com.training.org;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+public class DatabaseOperations {
+	String url;
+	String userName;
+	String password;
+	Connection con;
+	
+	public static void main(String[] args) throws SQLException {
+		String url="jdbc:mysql://localhost:3306/example";
+		String userName="root";
+		String password="shital@123";
+		Connection con=null;
+		String query="SELECT version()";
+
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver"); //Driver name
+			con=DriverManager.getConnection(url,userName,password);
+			Statement s1=con.createStatement();
+			ResultSet rs=s1.executeQuery(query);
+
+			if(rs.next()) {
+				System.out.println(rs.getString(1));
+			}
+
+
+
+		}
+		catch(Exception e) {
+			System.out.println(e.getMessage());
+		}
+		finally {
+			con.close();
+		}
+
+	}
+
+}
+
+
+
+
+
+
+
+package com.training.org;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+public class DatabaseOperations {
+	public static void main(String[] args) throws SQLException {
+		String url="jdbc:mysql://localhost:3306/example";
+		String userName="root";
+		String password="shital@123";
+		Connection con=null;
+		String query="SELECT version()";
+
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver"); //Driver name
+
+			con=DriverManager.getConnection(url,userName,password);
+			Statement s1=con.createStatement();
+			ResultSet rs=s1.executeQuery(query);
+
+			if(rs.next()) {
+				System.out.println(rs.getString(1));
+			}
+
+
+
+		}
+		catch(Exception e) {
+			System.out.println(e.getMessage());
+		}
+		finally {
+			con.close();
+		}
+
+	}
+
+}
+
+
+
+
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.training</groupId>
+	<artifactId>DDBCSampleApplication</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<dependencies>
+		
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.21</version>
+		</dependency>
+
+
+	</dependencies>
+</project>
+
+
+
+
+
+https://quizizz.com/join?gc=619958
+    
+
+
+CREATE TABLE user (name VARCHAR(20), owner VARCHAR(20),
+       species VARCHAR(20), sex CHAR(1), birth DATE, death DATE);
+
+
+
+https://gofile.io/d/6iZIpv
+    
+    
+
+
+https://stackoverflow.com/questions/42421585/default-password-of-mysql-in-ubuntu-server-16-04
+    
+    
+
+
+https://www.filehorse.com/download-mysql-64/
+    
+    
+https://dev.mysql.com/downloads/mysql/
+    
+    
+    
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+public class DatabaseConectivity {
+	public static void main(String[] args) throws SQLException {
+		Connection con=null;
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver"); //Driver name
+			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/example","root","shital@123");
+
+			if(con != null) {
+				System.out.println("Connected");
+				
+				Statement stmt=con.createStatement();
+				ResultSet rs=stmt.executeQuery("select * from user");
+				
+				while(rs.next()) {
+					System.out.println(rs.getInt(1)+" "+rs.getString(2)+" "+rs.getString(3)+"  "+rs.getString(4)+" "+rs.getString(5));
+				}
+				
+				
+			}
+			else
+				System.out.println("Not conencted");
+		} catch (ClassNotFoundException e) {
+			System.out.println(e.getMessage());
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		finally {
+			con.close();	
+		}
+
+	}
+}
+
+
+
+
+
+
+https://jar-download.com/artifacts/mysql/mysql-connector-java
+    
+    
+    
+    
+
+public static void main(String[] args) throws Exception
+    {
+    	Connection con=null;
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver"); //Driver name
+			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/example","root","shital@123");
+			
+			if(con != null) {
+				System.out.println("Connected");
+			}
+			else
+				System.out.println("Not conencted");
+		} catch (ClassNotFoundException e) {
+			System.out.println(e.getMessage());
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		finally {
+			con.close();	
+		}
+    	
+       
+    }
+   
+
+
+Every event handler requires three pieces of code:
+declaration of the event handler class that implements a listener interface or extends a class that implements a listener interface
+public class MyClass implements ActionListener { 
+registration of an instance of the event handler class as a listener
+	someComponent.addActionListener(instanceOfMyClass); 
+3.	providing code that implements the methods in the listener interface in the event handler class
+	public void actionPerformed(ActionEvent e) { ...//code that reacts to the action...
+	} 
+
+
+
+    
+    
+public class SwingApplication extends JFrame {
+  private static String labelPrefix = "Number of 	button clicks: ";
+  private int numClicks = 0;
+  JLabel label = new JLabel(labelPrefix + "0    ");
+  public SwingApplication(String title) {
+    super(title);
+    JButton button = new JButton("I'm a Swing 		button!");
+    button.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        label.setText(labelPrefix + ++numClicks);
+      }
+    });
+    JPanel panel = new JPanel();
+    panel.add(button);
+    panel.add(label);
+    getContentPane().add(panel);
+    pack();
+    setVisible(true);
+  }
+  public static void main(String[] args) {
+    new SwingApplication("SwingApplication");  }}
+
+
+
+
+
+
+AWT
+
+
+Pros
+Speed:  native components speed performance.
+Look and feel:  AWT components more closely reflect the look and feel of the OS they run on.
+Cons
+Portability:  use of native peers creates platform specific limitations.
+Features:  AWT supports only the lowest common denominator—e.g. no tool tips or icons.
+
+
+
+
+
+Swing 
+
+
+Pros
+Portability:  Pure Java implementation.
+Features:  Not limited by native components.
+Look and Feel:  Pluggable look and feel.  Components automatically have the look and feel of the OS their running on.
+Cons
+Performance:  Swing components handle their own painting (instead of using APIs like DirectX on Windows).
+Look and Feel:  May look slightly different than native components.
+
+    
+
+
+https://gofile.io/d/QjTIpC
+    
+    
+    
+    
+    
+
+import java.awt.* ;    import java.awt.event.* ;    import javax.swing.* ;
+public class JTableDemo extends JApplet   {
+	public void init( )   {
+
+		Container c = getContentPane( ) ;
+		c.setLayout( new BorderLayout( ) ) ;
+
+		String fields [  ]  =  {  " EMP ID ",  " EMP NAME ",  " EMP SALARY "  } ;
+
+		Object details [ ]  [ ]  = {  {  " 1 " ,   " S N Rao " ,  " 4500.50 "  } ,
+				{  " 2 " , " Sumathi " ,  " 4567.50 "  } ,
+				{  " 3 " ,  " Sridhar " ,  " 2246.30 " } ,
+				{  " 4 " ,  " Jyothi " ,  " 3245.75 "  }  ,
+				{  " 5 " ,  " Jyostna " ,  " 2500.25 "  }   }  ;
+
+		JTable jt = new JTable( details ,  fields ) ;
+
+		int v = ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED ; // if the rows are more than         
+		int h = ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED ;  // height of the applet,     
+		JScrollPane jsp = new JScrollPane( jt , v , h ) ; 	// scroll bar is added
+
+		c.add( jsp , "Center" ) ;
+	}
+}
+
+
+
+
+
+
+import java.awt.* ;    
+import java.awt.event.* ;    
+import javax.swing.* ;    
+import javax.swing.event.* ;    
+
+public class JSliderDemo extends JFrame implements ChangeListener
+{
+	Canvas cvas ;
+	JSlider js ;
+	public JSliderDemo( )   		  
+	{
+		Container c = getContentPane(  );
+		cvas = new Canvas(  );
+		js = new JSlider(SwingConstants.HORIZONTAL, 0, 255, 15);
+// 15 gives the default position of the scroll box
+
+		c.add(cvas, "Center");
+		c.add( js, "South");
+
+		js.setMajorTickSpacing(20);  //  gives tick marks on the slider with a gap of 10 pixels
+		js.setMinorTickSpacing(5);
+		js.setPaintTicks(true); // this makes tick marks visible on the slider
+		js.setPaintLabels(true);
+		js.addChangeListener(this);
+
+		
+ 		addWindowListener( new WindowAdapter( )   
+		{
+                    		public void windowClosing( WindowEvent e )  
+				{
+	                    		System.exit( 0 ) ;
+                        	} } ) ;
+	
+		setTitle("Learning JTextArea");
+		setSize(400,300);
+		setVisible(true);
+	}
+	public void stateChanged(ChangeEvent e)
+	{
+		int value = js.getValue( ) ;
+// this is taken as green component
+	Color clr = new Color(200, value, 100 );
+		cvas.setBackground(clr);
+		cvas.repaint( );
+	}
+	public static void main(String args[ ])
+	{
+		new JSliderDemo( );
+	}
+}
+
+// getValue( ) returns the value of the JSlider.
+
+
+
+
+
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class JRadioDemo extends JFrame implements ItemListener
+{
+	JRadioButton shirtbut, pantbut, sareebut, brownbut, graybut, creambut ;
+
+	public JRadioDemo( )
+	{
+	Container c = getContentPane( ); 	
+	c.setLayout(new FlowLayout( ));
+
+// to create ButtonGroup objects that group checkboxes
+	ButtonGroup group1 = new ButtonGroup( ) ;
+	ButtonGroup group2 = new ButtonGroup( ) ;
+
+// first set of radio buttons for clothes selection
+	shirtbut = new JRadioButton("Shirt");
+	pantbut = new JRadioButton("Pant");
+	sareebut = new JRadioButton("Saree");
+
+// second set of radio buttons for color selection
+	brownbut = new JRadioButton("Brown");
+	graybut = new JRadioButton("Gray");
+	creambut = new JRadioButton("Cream");		
+
+// grouping the radio buttons
+  // shirtbut, pantbut and sareebut are made into one group by name group1 of ButtonGroup class
+	group1.add(shirtbut);
+	group1.add(pantbut); 
+	group1.add(sareebut);  
+
+// for second group, group2
+	group2.add(brownbut); 
+	group2.add(graybut);
+	group2.add(creambut);
+
+// add individual radio buttons to the container
+		c.add(shirtbut); 
+		c.add(pantbut);
+		c.add(sareebut);
+		c.add(brownbut);
+		c.add(graybut);
+		c.add(creambut);
+
+// register each radio button with the listener
+		shirtbut.addItemListener(this);
+		pantbut.addItemListener(this);
+		sareebut.addItemListener(this);
+		brownbut.addItemListener(this);
+		graybut.addItemListener(this);
+		creambut.addItemListener(this);
+// for window closing
+		addWindowListener( new 			WindowAdapter( )
+			{
+	     public void windowClosing(WindowEvent e)
+	    {
+		System.exit(0);
+	    }
+	} ) ;
+
+		setTitle("Learning Radio Buttons");
+		setSize(250,200);
+		setVisible(true);
+	}
+	public void itemStateChanged(ItemEvent e)
+	{
+	String name = " ", color = " " ;  // two local variables
+
+	if(shirtbut.isSelected( ) )
+		name = "Shirt";
+	else if(pantbut.isSelected( ) )
+		name = "Pant";
+	else if(sareebut.isSelected( ) )
+		name = "Saree";
+
+	if(brownbut.isSelected( ) )
+		color = "Brown";
+	else if(graybut.isSelected( ) )
+		color = "Gray";
+	else if(creambut.isSelected( ))
+		color = "Cream";
+		JOptionPane.showMessageDialog(null, "You wanted " + name + " in color " + color,  "Learning Applications", JOptionPane.INFORMATION_MESSAGE);
+	}
+
+	public static void main( String args[ ] )
+	{
+	               new JRadioDemo( ) ;
+                   }
+ }
+
+
+
+
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+  
+class MyFrame
+    extends JFrame
+    implements ActionListener {
+  
+    // Components of the Form
+    private Container c;
+    private JLabel title;
+    private JLabel name;
+    private JTextField tname;
+    private JLabel mno;
+    private JTextField tmno;
+    private JLabel gender;
+    private JRadioButton male;
+    private JRadioButton female;
+    private ButtonGroup gengp;
+    private JLabel dob;
+    private JComboBox date;
+    private JComboBox month;
+    private JComboBox year;
+    private JLabel add;
+    private JTextArea tadd;
+    private JCheckBox term;
+    private JButton sub;
+    private JButton reset;
+    private JTextArea tout;
+    private JLabel res;
+    private JTextArea resadd;
+  
+    private String dates[]
+        = { "1", "2", "3", "4", "5",
+            "6", "7", "8", "9", "10",
+            "11", "12", "13", "14", "15",
+            "16", "17", "18", "19", "20",
+            "21", "22", "23", "24", "25",
+            "26", "27", "28", "29", "30",
+            "31" };
+    private String months[]
+        = { "Jan", "feb", "Mar", "Apr",
+            "May", "Jun", "July", "Aug",
+            "Sup", "Oct", "Nov", "Dec" };
+    private String years[]
+        = { "1995", "1996", "1997", "1998",
+            "1999", "2000", "2001", "2002",
+            "2003", "2004", "2005", "2006",
+            "2007", "2008", "2009", "2010",
+            "2011", "2012", "2013", "2014",
+            "2015", "2016", "2017", "2018",
+            "2019" };
+  
+    // constructor, to initialize the components
+    // with default values.
+    public MyFrame()
+    {
+        setTitle("Registration Form");
+        setBounds(300, 90, 900, 600);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setResizable(false);
+  
+        c = getContentPane();
+        c.setLayout(null);
+  
+        title = new JLabel("Registration Form");
+        title.setFont(new Font("Arial", Font.PLAIN, 30));
+        title.setSize(300, 30);
+        title.setLocation(300, 30);
+        c.add(title);
+  
+        name = new JLabel("Name");
+        name.setFont(new Font("Arial", Font.PLAIN, 20));
+        name.setSize(100, 20);
+        name.setLocation(100, 100);
+        c.add(name);
+  
+        tname = new JTextField();
+        tname.setFont(new Font("Arial", Font.PLAIN, 15));
+        tname.setSize(190, 20);
+        tname.setLocation(200, 100);
+        c.add(tname);
+  
+        mno = new JLabel("Mobile");
+        mno.setFont(new Font("Arial", Font.PLAIN, 20));
+        mno.setSize(100, 20);
+        mno.setLocation(100, 150);
+        c.add(mno);
+  
+        tmno = new JTextField();
+        tmno.setFont(new Font("Arial", Font.PLAIN, 15));
+        tmno.setSize(150, 20);
+        tmno.setLocation(200, 150);
+        c.add(tmno);
+  
+        gender = new JLabel("Gender");
+        gender.setFont(new Font("Arial", Font.PLAIN, 20));
+        gender.setSize(100, 20);
+        gender.setLocation(100, 200);
+        c.add(gender);
+  
+        male = new JRadioButton("Male");
+        male.setFont(new Font("Arial", Font.PLAIN, 15));
+        male.setSelected(true);
+        male.setSize(75, 20);
+        male.setLocation(200, 200);
+        c.add(male);
+  
+        female = new JRadioButton("Female");
+        female.setFont(new Font("Arial", Font.PLAIN, 15));
+        female.setSelected(false);
+        female.setSize(80, 20);
+        female.setLocation(275, 200);
+        c.add(female);
+  
+        gengp = new ButtonGroup();
+        gengp.add(male);
+        gengp.add(female);
+  
+        dob = new JLabel("DOB");
+        dob.setFont(new Font("Arial", Font.PLAIN, 20));
+        dob.setSize(100, 20);
+        dob.setLocation(100, 250);
+        c.add(dob);
+  
+        date = new JComboBox(dates);
+        date.setFont(new Font("Arial", Font.PLAIN, 15));
+        date.setSize(50, 20);
+        date.setLocation(200, 250);
+        c.add(date);
+  
+        month = new JComboBox(months);
+        month.setFont(new Font("Arial", Font.PLAIN, 15));
+        month.setSize(60, 20);
+        month.setLocation(250, 250);
+        c.add(month);
+  
+        year = new JComboBox(years);
+        year.setFont(new Font("Arial", Font.PLAIN, 15));
+        year.setSize(60, 20);
+        year.setLocation(320, 250);
+        c.add(year);
+  
+        add = new JLabel("Address");
+        add.setFont(new Font("Arial", Font.PLAIN, 20));
+        add.setSize(100, 20);
+        add.setLocation(100, 300);
+        c.add(add);
+  
+        tadd = new JTextArea();
+        tadd.setFont(new Font("Arial", Font.PLAIN, 15));
+        tadd.setSize(200, 75);
+        tadd.setLocation(200, 300);
+        tadd.setLineWrap(true);
+        c.add(tadd);
+  
+        term = new JCheckBox("Accept Terms And Conditions.");
+        term.setFont(new Font("Arial", Font.PLAIN, 15));
+        term.setSize(250, 20);
+        term.setLocation(150, 400);
+        c.add(term);
+  
+        sub = new JButton("Submit");
+        sub.setFont(new Font("Arial", Font.PLAIN, 15));
+        sub.setSize(100, 20);
+        sub.setLocation(150, 450);
+        sub.addActionListener(this);
+        c.add(sub);
+  
+        reset = new JButton("Reset");
+        reset.setFont(new Font("Arial", Font.PLAIN, 15));
+        reset.setSize(100, 20);
+        reset.setLocation(270, 450);
+        reset.addActionListener(this);
+        c.add(reset);
+  
+        tout = new JTextArea();
+        tout.setFont(new Font("Arial", Font.PLAIN, 15));
+        tout.setSize(300, 400);
+        tout.setLocation(500, 100);
+        tout.setLineWrap(true);
+        tout.setEditable(false);
+        c.add(tout);
+  
+        res = new JLabel("");
+        res.setFont(new Font("Arial", Font.PLAIN, 20));
+        res.setSize(500, 25);
+        res.setLocation(100, 500);
+        c.add(res);
+  
+        resadd = new JTextArea();
+        resadd.setFont(new Font("Arial", Font.PLAIN, 15));
+        resadd.setSize(200, 75);
+        resadd.setLocation(580, 175);
+        resadd.setLineWrap(true);
+        c.add(resadd);
+  
+        setVisible(true);
+    }
+  
+    // method actionPerformed()
+    // to get the action performed
+    // by the user and act accordingly
+    public void actionPerformed(ActionEvent e)
+    {
+        if (e.getSource() == sub) {
+            if (term.isSelected()) {
+                String data1;
+                String data
+                    = "Name : "
+                      + tname.getText() + "\n"
+                      + "Mobile : "
+                      + tmno.getText() + "\n";
+                if (male.isSelected())
+                    data1 = "Gender : Male"
+                            + "\n";
+                else
+                    data1 = "Gender : Female"
+                            + "\n";
+                String data2
+                    = "DOB : "
+                      + (String)date.getSelectedItem()
+                      + "/" + (String)month.getSelectedItem()
+                      + "/" + (String)year.getSelectedItem()
+                      + "\n";
+  
+                String data3 = "Address : " + tadd.getText();
+                tout.setText(data + data1 + data2 + data3);
+                tout.setEditable(false);
+                res.setText("Registration Successfully..");
+            }
+            else {
+                tout.setText("");
+                resadd.setText("");
+                res.setText("Please accept the"
+                            + " terms & conditions..");
+            }
+        }
+  
+        else if (e.getSource() == reset) {
+            String def = "";
+            tname.setText(def);
+            tadd.setText(def);
+            tmno.setText(def);
+            res.setText(def);
+            tout.setText(def);
+            term.setSelected(false);
+            date.setSelectedIndex(0);
+            month.setSelectedIndex(0);
+            year.setSelectedIndex(0);
+            resadd.setText(def);
+        }
+    }
+}
+  
+// Driver Code
+public class Registration {
+  
+    public static void main(String[] args) throws Exception
+    {
+        MyFrame f = new MyFrame();
+    }
+}
+
+
+
+
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class JCheckBoxDemo extends JFrame implements ItemListener
+{
+	JTextField tf ;
+	JCheckBox namebox, boldbox, italicbox ;
+
+	public JCheckBoxDemo( )
+	{
+		Container c = getContentPane( ); 	
+		c.setLayout(new FlowLayout( ));
+		// create the text field
+		tf = new JTextField("J2EE or .NET; which will be popular", 30);
+		c.add(tf);
+		// create JCheckBox objects
+		namebox = new JCheckBox("Monospaced");
+		c.add(namebox);		
+
+		boldbox = new JCheckBox("Bold"); // Bold will be displayed 
+		c.add(boldbox);		   // besides the checkbox
+
+		italicbox = new JCheckBox("Italic");
+		c.add(italicbox);		
+		// register each checkbox with ItemListener
+		namebox.addItemListener(this);
+		boldbox.addItemListener(this);
+		italicbox.addItemListener(this);
+
+		addWindowListener( new WindowAdapter( )
+		{
+			public void windowClosing(WindowEvent e)
+			{
+				System.exit(0);
+			}
+		} ) ;
+
+		setTitle("Learning JButton");
+		setSize(400,200);
+		setVisible(true);
+	}
+	public void itemStateChanged(ItemEvent e)
+	{
+		String fontname = "";  // some compilers will raise error if local variables
+
+		int b = 0, i = 0 ;	// are not initialized
+
+		if(namebox.isSelected( ) )
+			fontname = "Monospaced";
+		else
+			fontname = "Serif";
+
+		if(boldbox.isSelected( ) )
+			b = Font.BOLD;
+		else
+			b = Font.PLAIN;
+
+		if(italicbox.isSelected( ) )
+			i = Font.ITALIC;
+		else
+			i = Font.PLAIN;
+
+		Font f = new Font(fontname, b + i , 15);			
+		tf.setFont( f );  // setting a font to the text in the text field
+	}
+
+	public static void main( String args[ ] )
+	{
+		new JCheckBoxDemo( ) ;
+	}
+}
+
+
+
+    
+
+
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JTextArea;
+public class SwingExample implements ActionListener{
+	
+	JButton button;
+	JFrame frame;
+	JTextArea textArea;
+	
+	
+	public SwingExample() {
+		button=new JButton("Click me");
+		frame=new JFrame("ACtionListener Test");
+		textArea=new JTextArea(5,40);
+		
+		button.addActionListener(this);
+		textArea.setLineWrap(true);
+		
+		frame.setLayout(new BorderLayout());
+		frame.add(textArea,BorderLayout.NORTH);
+		frame.add(button,BorderLayout.SOUTH);
+		
+		frame.pack();
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
+	}
+	
+	
+	
+	public static void main(String[] args) {
+		SwingExample s=new SwingExample();
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		textArea.setText(textArea.getText().concat("You have clicked the button\n"));
+		
+		
+	}
+}
+
+
+
+
+
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JTextField;
+
+public class SwingExample {
+	public static void main(String[] args) {
+		JFrame jF=new JFrame();
+		JButton btn=new JButton("Click");
+		final JTextField tf=new JTextField();
+		btn.setBounds(130, 100, 100, 40);
+		btn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				tf.setText("Hello im back");
+				
+			}
+		});
+		jF.add(btn);
+		jF.add(tf);
+		
+		jF.setSize(400,500);
+		jF.setLayout(null);
+		jF.setVisible(true);
+	}
+}
+
+
+
+
+
+
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
+public class SwingExample {
+	public static void main(String[] args) {
+		JFrame jF=new JFrame();
+		JButton btn=new JButton("Click");
+		
+		btn.setBounds(130, 100, 100, 40);
+		
+		jF.add(btn);
+		
+		jF.setSize(400,500);
+		jF.setLayout(null);
+		jF.setVisible(true);
+	}
+}
+
+
+
+
+
+
+Swing implements GUI components that build on AWT technology.
+Swing is implemented entirely in Java.
+Swing components do not depend on peers to handle their functionality.  Thus, these components are often called lightweight components.
+
+
+
+The Abstract Window Toolkit is a portable GUI library.
+AWT provides the connection between your application and the native GUI.
+AWT provides a high-level abstraction since it hides you from the underlying details of the GUI your program will be running on.
+AWT components depend on native code counterparts (called peers) to handle their functionality.  Thus, these components are often called heavyweight components.
+

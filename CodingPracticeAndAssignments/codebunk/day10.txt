@@ -1,0 +1,2025 @@
+
+
+
+
+https://docs.jboss.org/hibernate/orm/3.3/reference/en/html/collections.html
+    
+    
+    
+    
+
+name: the collection property name
+2	table (optional - defaults to property name): the name of the collection table. It is not used for one-to-many associations.
+3	schema (optional): the name of a table schema to override the schema declared on the root element
+4	lazy (optional - defaults to true): disables lazy fetching and specifies that the association is always eagerly fetched. It can also be used to enable "extra-lazy" fetching where most operations do not initialize the collection. This is suitable for large collections.
+5	inverse (optional - defaults to false): marks this collection as the "inverse" end of a bidirectional association.
+6	cascade (optional - defaults to none): enables operations to cascade to child entities.
+7	sort (optional): specifies a sorted collection with natural sort order or a given comparator class.
+8	order-by (optional, JDK1.4 only): specifies a table column or columns that define the iteration order of the Map, Set or bag, together with an optional asc or desc.
+    
+    
+    
+9	where (optional): specifies an arbitrary SQL WHERE condition that is used when retrieving or removing the collection. This is useful if the collection needs to contain only a subset of the available data.
+10	fetch (optional, defaults to select): chooses between outer-join fetching, fetching by sequential select, and fetching by sequential subselect.
+11	batch-size (optional, defaults to 1): specifies a "batch size" for lazily fetching instances of this collection.
+12	access (optional - defaults to property): the strategy Hibernate uses for accessing the collection property value.
+13	optimistic-lock (optional - defaults to true): specifies that changes to the state of the collection results in increments of the owning entity's version. For one-to-many associations you may want to disable this setting.
+14	mutable (optional - defaults to true): a value of false specifies that the elements of the collection never change. This allows for minor performance optimization in some cases.
+    
+    
+    
+    
+    
+
+
+CREATE TABLE customer(
+  customerId int,customerName varchar(30),forevenId int,
+   PRIMARY KEY (customerId)
+);
+ 
+CREATE TABLE Vendor(
+	vendorId int(10),vendorName varchar(30),
+       PRIMARY KEY (vendorId),
+       KEY `fk_category` (vendorId)
+);
+
+
+
+
+
+package com.cognizant.org;
+import java.util.Set;
+public class Vendor {
+	private int vendorId;
+	private String vendorName;
+	private Set children;
+	public int getVendorId() {
+		return vendorId;
+	}
+	public void setVendorId(int vendorId) {
+		this.vendorId = vendorId;
+	}
+	public String getVendorName() {
+		return vendorName;
+	}
+	public void setVendorName(String vendorName) {
+		this.vendorName = vendorName;
+	}
+	public Set getChildren() {
+		return children;
+	}
+	public void setChildren(Set children) {
+		this.children = children;
+	}
+
+}
+
+
+
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="com.cognizant.org.Vendor" table="vendor">
+
+		<id name="vendorId" column="vendid" />
+		<property name="vendorName" column="vendname" length="10" />
+
+		<set name="children" cascade="all">
+
+			<key column="forevenid" />
+			<one-to-many class="com.cognizant.org.Customer" />
+
+		</set>
+
+	</class>
+</hibernate-mapping>
+
+
+
+
+
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <!-- Database connection settings -->
+        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/shital</property>
+        <property name="connection.username">root</property>
+        <property name="connection.password">shital</property>
+        
+        <!-- JDBC connection pool (use the built-in) -->
+        <property name="connection.pool_size">1</property>
+        <property name="hibernate.jdbc.batch_size">50</property>
+        <!-- SQL dialect -->
+        <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+
+        <!-- Enable Hibernate's automatic session context management -->
+        <property name="current_session_context_class">thread</property>
+
+        <!-- Disable the second-level cache  -->
+        <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+        
+        <!-- Echo all executed SQL to stdout -->
+        <property name="show_sql">false</property>
+   
+        <property name="hbm2ddl.auto">validate</property>
+        <!-- List of XML mapping files -->
+   
+        <mapping resource="Customer.hbm.xml"></mapping>
+		<mapping resource="Vendor.hbm.xml"></mapping>
+    </session-factory>
+</hibernate-configuration>
+
+
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="com.cognizant.org.Customer" table="customer">
+
+		<id name="customerId" column="custid" />
+		<property name="customerName" column="custname" length="10" />
+
+		<property name="forevenId" column="forevenid" insert="false" />
+
+	</class>
+</hibernate-mapping>
+
+
+
+
+
+package com.cognizant.org;
+import java.util.Set;
+public class Vendor {
+	private int vendorId;
+	private String vendorName;
+	private Set children;
+	public int getVendorId() {
+		return vendorId;
+	}
+	public void setVendorId(int vendorIdpackage com.cognizant.org;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+import org.hibernate.Criteria;
+import org.hibernate.Query;
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+
+public class CompanyMangement {
+
+	public static void main(String args[])
+	{
+
+		Configuration cfg = new Configuration();
+		cfg.configure("hibernate.cfg.xml");
+
+		SessionFactory factory = cfg.buildSessionFactory();
+		Session session = factory.openSession();
+		
+		//Query qry= session.createQuery("select v.vendorName, c.customerName from Vendor "
+			//	+ "v Left Join v.children c");
+
+		String sql = "SELECT * FROM EMPLOYEE2";
+		SQLQuery query = session.createSQLQuery(sql);
+		query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+		List results = query.list();
+		
+		System.out.println(results);
+
+		
+//		Query qry=session.createQuery("from Vendor as vend where vend.vendorName like '%F%'");
+// 		List l = qry.list();
+// 		
+// 		for (Object object : l) {
+//			Vendor v=(Vendor)object;
+//			System.out.println(v.getVendorName());
+//		}
+ 		
+//		Iterator it=l.iterator();
+// 		while(it.hasNext())
+//		{
+//			Object rows[] = (Object[])it.next();
+//			System.out.println(rows[0]+ " -- " +rows[1]);
+//		}
+ 
+
+		
+		
+		//parent object
+//		Vendor v =new Vendor();
+//
+//		v.setVendorId(101);
+//		v.setVendorName("First Vendor");
+//
+//		//creating 3 child objects
+//		Customer c1=new Customer();
+//
+//		c1.setCustomerId(504);
+//		c1.setCustomerName("customer4");
+//
+//		Customer c2=new Customer();
+//
+//		c2.setCustomerId(505);
+//		c2.setCustomerName("customer5");
+//
+//		Customer c3=new Customer();
+//
+//		c3.setCustomerId(506);
+//		c3.setCustomerName("customer6");
+//
+//		// adding child objects to set, as we taken 3rd property set in parent
+//		Set s=new HashSet();
+//
+//		s.add(c1);
+//		s.add(c2);
+//		s.add(c3);
+//
+//		v.setChildren(s);
+//
+//		Transaction tx = session.beginTransaction();
+//
+//		session.save(v);
+//
+//		tx.commit();
+		session.close();
+		
+		factory.close();
+
+	}
+}) {
+		this.vendorId = vendorId;
+	}
+	public String getVendorName() {
+		return vendorName;
+	}
+	public void setVendorName(String vendorName) {
+		this.vendorName = vendorName;
+	}
+	public Set getChildren() {
+		return children;
+	}
+	public void setChildren(Set children) {
+		this.children = children;
+	}
+
+}
+
+
+
+
+
+
+
+package com.cognizant.org;
+public class Customer{
+	private int customerId;
+	private String customerName;
+	private int forevenId;
+
+	public int getCustomerId() {
+		return customerId;
+	}
+	public void setCustomerId(int customerId) {
+		this.customerId = customerId;
+	}
+	public String getCustomerName() {
+		return customerName;
+	}
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
+	}
+
+	public int getForevenId() {
+		return forevenId;
+	}
+	public void setForevenId(int forevenId) {
+		this.forevenId = forevenId;
+	}
+
+}
+
+--------------------------------------------------------------------------------------
+
+package com.training.org;
+
+public class Address{
+	private int id;
+	private String street;     
+	private String city;     
+	private String zipcode; 
+
+	public Address() {}
+
+	public Address(String street, String city,  String zipcode) {
+		this.street = street; 
+		this.city = city; 
+
+		this.zipcode = zipcode; 
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getStreet() {
+		return street;
+	}
+
+	public void setStreet(String street) {
+		this.street = street;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getZipcode() {
+		return zipcode;
+	}
+
+	public void setZipcode(String zipcode) {
+		this.zipcode = zipcode;
+	}
+
+}
+
+
+
+
+
+
+
+
+package com.training.org;
+
+public class Employee{
+   private int id;
+   private String firstName; 
+   private String lastName;   
+   private int salary;
+   private Address address;
+
+   public Employee() {}
+   
+   public Employee(String fname, String lname, int salary, Address address ) {
+      this.firstName = fname;
+      this.lastName = lname;
+      this.salary = salary;
+      this.address = address;
+   }
+   
+   public int getId() {
+      return id;
+   }
+   
+   public void setId( int id ) {
+      this.id = id;
+   }
+   
+   public String getFirstName() {
+      return firstName;
+   }
+   
+   public void setFirstName( String first_name ) {
+      this.firstName = first_name;
+   }
+   
+   public String getLastName() {
+      return lastName;
+   }
+   
+   public void setLastName( String last_name ) {
+      this.lastName = last_name;
+   }
+   
+   public int getSalary() {
+      return salary;
+   }
+   
+   public void setSalary( int salary ) {
+      this.salary = salary;
+   }
+
+   public Address getAddress() {
+      return address;
+   }
+   
+   public void setAddress( Address address ) {
+      this.address = address;
+   }
+}
+
+
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+ 
+    <groupId>com.websystique.hibernate</groupId>
+    <artifactId>HibernateStandAloneWithAnnotationDemo</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+ 
+    <name>HibernateStandAloneWithAnnotationDemo</name>
+ 
+    <properties>
+        <hibernate.version>4.3.6.Final</hibernate.version>
+    </properties>
+ 
+    <dependencies>	
+        <!-- Hibernate -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+ 
+        <!-- MySQL -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.16</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.2</version>
+                    <configuration>
+                        <source>1.6</source>
+                        <target>1.6</target>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+ 
+</project>
+
+
+
+
+
+
+
+
+
+
+<dependency>
+        <groupId>org.aspectj</groupId>
+        <artifactId>aspectjrt</artifactId>
+        <version>1.8.5</version>
+    </dependency>
+
+    <dependency>
+        <groupId>org.aspectj</groupId>
+        <artifactId>aspectjweaver</artifactId>
+        <version>1.8.5</version>
+    </dependency>
+    
+    
+
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration SYSTEM "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+
+<hibernate-configuration>
+	<session-factory>
+		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+		<property name="hibernate.connection.username">root</property>
+		<property name="hibernate.connection.password">shital@123</property>
+		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/relationship</property>
+		<property name="hibernate.c3p0.min_size">5</property>
+		<property name="hibernate.c3p0.max_size">20</property>
+		<property name="hibernate.c3p0.acquire_increment">5</property>
+		<property name="hibernate.c3p0.timeout">1800</property>
+		<property name="show_sql">true</property>
+		<property name="format_sql">false</property>
+		<mapping resource="employee.hbm.xml" />
+	</session-factory>
+</hibernate-configuration>
+
+
+
+
+
+
+mysql> create table EMPLOYEE (
+    ->    id INT NOT NULL auto_increment,
+    ->    first_name VARCHAR(20) default NULL,
+    ->    last_name  VARCHAR(20) default NULL,
+    ->    salary     INT  default NULL,
+    ->    address    INT NOT NULL,
+    ->    PRIMARY KEY (id)
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> create table ADDRESS (
+    ->    id INT NOT NULL auto_increment,
+    ->    street_name VARCHAR(40) default NULL,
+    ->    city_name VARCHAR(40) default NULL,
+    ->    zipcode VARCHAR(10) default NULL,
+    ->    PRIMARY KEY (id)
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+
+package com.training.org;
+
+public class Address{
+	private int id;
+	private String street;     
+	private String city;     
+	private String zipcode; 
+
+	public Address() {}
+
+	public Address(String street, String city,  String zipcode) {
+		this.street = street; 
+		this.city = city; 
+
+		this.zipcode = zipcode; 
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getStreet() {
+		return street;
+	}
+
+	public void setStreet(String street) {
+		this.street = street;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getZipcode() {
+		return zipcode;
+	}
+
+	public void setZipcode(String zipcode) {
+		this.zipcode = zipcode;
+	}
+
+}
+
+
+
+package com.training.org;
+
+import org.hibernate.HibernateException; 
+import org.hibernate.Session; 
+import org.hibernate.Transaction;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+
+public class EmployeeManagement {
+  private static SessionFactory factory; 
+  public static void main(String[] args) {
+     
+     try {
+        factory = new Configuration().configure().buildSessionFactory();
+     } catch (Throwable ex) { 
+        System.err.println("Failed to create sessionFactory object." + ex);
+        throw new ExceptionInInitializerError(ex); 
+     }
+     
+     EmployeeManagement em = new EmployeeManagement();
+
+     /* Let us have one address object */
+     Address address1 = em.addAddress("anis","pune","AP","532");
+
+     /* Add employee records in the database */
+     Integer empID1 = em.addEmployee("tanihs", "mumbai", 4000, address1);
+
+     /* Let us have another address object */
+     Address address2 = em.addAddress("abc","xyz","UP","111");
+ 
+     /* Add another employee record in the database */
+     Integer empID2 = em.addEmployee("pqr", "Kumar", 3000, address2);
+
+ 
+
+  }
+
+  /* Method to add an address record in the database */
+  public Address addAddress(String street, String city, String state, String zipcode) {
+     Session session = factory.openSession();
+     Transaction tx = null;
+     Integer addressID = null;
+     Address address = null;
+     
+     try {
+        tx = session.beginTransaction();
+        address = new Address(street, city, zipcode);
+        addressID = (Integer) session.save(address); 
+        tx.commit();
+     } catch (HibernateException e) {
+        if (tx!=null) tx.rollback();
+        e.printStackTrace(); 
+     } finally {
+        session.close(); 
+     }
+     return address;
+  }
+
+  /* Method to add an employee record in the database */
+  public Integer addEmployee(String fname, String lname, int salary, Address address){
+     Session session = factory.openSession();
+     Transaction tx = null;
+     Integer employeeID = null;
+     
+     try {
+        tx = session.beginTransaction();
+        Employee employee = new Employee(fname, lname, salary, address);
+        employeeID = (Integer) session.save(employee); 
+        tx.commit();
+     } catch (HibernateException e) {
+        if (tx!=null) tx.rollback();
+        e.printStackTrace(); 
+     } finally {
+        session.close(); 
+     }
+     return employeeID;
+  }
+
+}
+
+
+
+
+
+
+
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+"-//Hibernate/Hibernate Mapping DTD//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+   <class name = "com.training.org.Employee" table = "EMPLOYEE">
+      <id name = "id" type = "int" column = "id">
+         <generator class="native"/>
+      </id>
+      <property name = "firstName" column = "first_name" type = "string"/>
+      <property name = "lastName" column = "last_name" type = "string"/>
+      <property name = "salary" column = "salary" type = "int"/>
+      <many-to-one name = "address" column = "address" unique="true" 
+         class="com.training.org.Address" not-null="true"/>
+         
+   </class>
+
+   <class name = "com.training.org.Address" table="ADDRESS">
+      
+     
+      <id name = "id" type = "int" column = "id">
+         <generator class="native"/>
+      </id>
+      
+      <property name = "street" column = "street_name" type = "string"/>
+      <property name = "city" column = "city_name" type = "string"/>
+      <property name = "zipcode" column = "zipcode" type = "string"/>
+      
+   </class>
+
+</hibernate-mapping>
+
+
+
+
+
+package com.training.org;
+
+public class Address{
+	private int id;
+	private String street;     
+	private String city;     
+	private String zipcode; 
+
+	public Address() {}
+
+	public Address(String street, String city,  String zipcode) {
+		this.street = street; 
+		this.city = city; 
+
+		this.zipcode = zipcode; 
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getStreet() {
+		return street;
+	}
+
+	public void setStreet(String street) {
+		this.street = street;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getZipcode() {
+		return zipcode;
+	}
+
+	public void setZipcode(String zipcode) {
+		this.zipcode = zipcode;
+	}
+
+}
+
+
+
+
+
+
+
+
+
+
+package com.training.org;
+
+public class Employee{
+   private int id;
+   private String firstName; 
+   private String lastName;   
+   private int salary;
+   private Address address;
+
+   public Employee() {}
+   
+   public Employee(String fname, String lname, int salary, Address address ) {
+      this.firstName = fname;
+      this.lastName = lname;
+      this.salary = salary;
+      this.address = address;
+   }
+   
+   public int getId() {
+      return id;
+   }
+   
+   public void setId( int id ) {
+      this.id = id;
+   }
+   
+   public String getFirstName() {
+      return firstName;
+   }
+   
+   public void setFirstName( String first_name ) {
+      this.firstName = first_name;
+   }
+   
+   public String getLastName() {
+      return lastName;
+   }
+   
+   public void setLastName( String last_name ) {
+      this.lastName = last_name;
+   }
+   
+   public int getSalary() {
+      return salary;
+   }
+   
+   public void setSalary( int salary ) {
+      this.salary = salary;
+   }
+
+   public Address getAddress() {
+      return address;
+   }
+   
+   public void setAddress( Address address ) {
+      this.address = address;
+   }
+}
+
+-----------------------------------------------------------
+
+
+package com.training.org;
+
+
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+
+public class EmployeeManagement {
+
+	private static SessionFactory factory;
+	@SuppressWarnings("deprecation")
+	public static void main(String[] args) {
+		factory=new Configuration().configure().buildSessionFactory();
+		
+		EmployeeManagement e1=new EmployeeManagement();
+		Address ad=e1.addAddress("ABC Street", "Pune","411045");
+		
+		Employee emp1 =new Employee("Anish","Madake",100000,ad);
+		
+	}
+	
+	
+	public Address addAddress(String street,String city,String zipCode) {
+		Session session=factory.openSession();
+		Transaction tx=null;
+		
+		
+		tx=session.beginTransaction();
+		Address address=new Address(street,city,zipCode);
+		session.save(address);
+		tx.commit();
+		
+		return address;
+				
+		
+	}
+
+	
+	public int addEmployee(String fName,String lName,int salary,Address address) {
+		Session session=factory.openSession();
+		Transaction tx=null;
+		
+		
+		tx=session.beginTransaction();
+		//Address address=new Address(street,city,zipCode);
+		
+		Employee e1=new Employee(fName,lName,salary,address);
+		
+		Integer employeeID=(Integer)session.save(e1);
+		tx.commit();
+			
+		return employeeID;
+		
+	}
+	
+}
+
+
+-----------------------------------------------------------------------
+
+package com.training.org;
+
+public class Employee {
+	
+	private int id;
+	private String firstName;
+	private String last_name;
+	private int salary;
+	private Address address;
+	
+	
+	
+	public Employee() {
+		super();
+	}
+
+
+
+	public Employee( String firstName, String last_name, int salary, Address address) {
+		super();
+		
+		this.firstName = firstName;
+		this.last_name = last_name;
+		this.salary = salary;
+		this.address = address;
+	}
+
+
+
+	public int getId() {
+		return id;
+	}
+
+
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+
+
+	public String getLast_name() {
+		return last_name;
+	}
+
+
+
+	public void setLast_name(String last_name) {
+		this.last_name = last_name;
+	}
+
+
+
+	public int getSalary() {
+		return salary;
+	}
+
+
+
+	public void setSalary(int salary) {
+		this.salary = salary;
+	}
+
+
+
+	public Address getAddress() {
+		return address;
+	}
+
+
+
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+
+
+
+	@Override
+	public String toString() {
+		return "Employee [id=" + id + ", firstName=" + firstName + ", last_name=" + last_name + ", salary=" + salary
+				+ "]";
+	}
+	
+	
+	
+
+}
+
+
+--------------------------------------------------------------
+
+package com.training.org;
+
+public class Address {
+	private int id;
+	private String street;
+	private String city;
+	private String zipCode;
+	
+	
+	public Address() {
+		super();
+	}
+
+
+	public Address(String street, String city, String zipCode) {
+		super();
+		
+		this.street = street;
+		this.city = city;
+		this.zipCode = zipCode;
+	}
+
+
+	public int getId() {
+		return id;
+	}
+
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+
+	public String getStreet() {
+		return street;
+	}
+
+
+	public void setStreet(String street) {
+		this.street = street;
+	}
+
+
+	public String getCity() {
+		return city;
+	}
+
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+
+	public String getZipCode() {
+		return zipCode;
+	}
+
+
+	public void setZipCode(String zipCode) {
+		this.zipCode = zipCode;
+	}
+
+
+	@Override
+	public String toString() {
+		return "Address [id=" + id + ", street=" + street + ", city=" + city + ", zipCode=" + zipCode + "]";
+	}
+
+	
+	
+}
+
+------------------------------------------------------------------------
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration SYSTEM "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+ 
+ 
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password">shital@123</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/relationship</property>
+        <property name="show_sql">true</property>
+        <property name="format_sql">false</property>
+        <mapping resource="hibernate.hbm.xml"/>
+    </session-factory>
+</hibernate-configuration>
+---------------------------------------------------------------------------------
+
+<?xml version='1.0' encoding='UTF-8'?>  
+<!DOCTYPE hibernate-mapping PUBLIC  
+ "-//Hibernate/Hibernate Mapping DTD 3.0//EN"  
+ "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="com.training.org.Employee" table="employee">
+		<id name="id" type="int" column="id">
+			<generator class="native"></generator>
+		</id>
+
+		<property name="firstName" column="first_name"></property>
+		<property name="last_Name" column="last_name"></property>
+		<property name="salary" column="salary"></property>
+		<many-to-one name="address" column="address" unique="true"
+			class="Address" not-null="true" />
+	</class>
+
+	<class name="com.training.org.Address" table="address">
+
+		<id name="id" type="int" column="id">
+			<generator class="native"></generator>
+		</id>
+
+		<property name="street" column="street_name"></property>
+		<property name="city" column="city_name"></property>
+		<property name="zipCode" column="zipcode"></property>
+
+
+	</class>
+
+
+</hibernate-mapping>  
+
+
+
+
+
+create table address(id int,street_name varchar(20),city_name varchar(20),zipcode varchar(20),primary key(id));
+
+
+
+
+
+create table employee(id int NOT NULL, first_name varchar(20),last_name varchar(20),salary int,address int,primary key(id));
+    
+    
+    
+
+
+According to hibernate, one object of one pojo class related to multiple objects of other pojo
+I mean, one [parent] to many [Children], example of one-to-many is some thing category books contains different type of books, one vendor contains lot of customers bla bla.
+To achieve one-to-many between two pojo classes in the hibernate, then the following two changes are required
+In the parent pojo class, we need to take a collection property, the collection can be either Set,List,Map (We will see the example on separate collection later)
+In the mapping file of that parent pojo class, we need to configure the collection
+I will take this vendor-customer as an example..
+
+
+
+
+
+https://quizizz.com/join?gc=850425
+    
+    
+    
+    
+
+
+Using above two methods together, we can construct a paging component in our web or Swing application. Following is the example which you can extend to fetch 10 rows at a time:
+
+String hql = "FROM Employee";
+Query query = session.createQuery(hql);
+query.setFirstResult(1);
+query.setMaxResults(10);
+List results = query.list();
+
+
+
+The distinct keyword only counts the unique values in the row set. The following query will return only unique count:
+
+String hql = "SELECT count(distinct E.firstName) FROM Employee E";
+Query query = session.createQuery(hql);
+List results = query.list();
+
+
+
+
+
+HQL supports INSERT INTO clause only where records can be inserted from one object to another object. Following is the simple syntax of using INSERT INTO clause:
+
+
+String hql = "INSERT INTO Employee(firstName, lastName, salary)"  + 
+             "SELECT firstName, lastName, salary FROM old_employee";
+Query query = session.createQuery(hql);
+int result = query.executeUpdate();
+System.out.println("Rows affected: " + result);
+
+
+
+
+The DELETE clause can be used to delete one or more objects. Following is the simple syntax of using DELETE clause:
+
+String hql = "DELETE FROM Employee "  + 
+             "WHERE id = :employee_id";
+Query query = session.createQuery(hql);
+query.setParameter("employee_id", 10);
+int result = query.executeUpdate();
+System.out.println("Rows affected: " + result);
+
+
+
+
+
+
+
+Bulk updates are new to HQL with Hibernate 3, and deletes work differently in Hibernate 3 than they did in Hibernate 2. The Query interface now contains a method called executeUpdate() for executing HQL UPDATE or DELETE statements.
+
+The UPDATE clause can be used to update one or more properties of an one or more objects. Following is the simple syntax of using UPDATE clause:
+
+String hql = "UPDATE Employee set salary = :salary "  + 
+             "WHERE id = :employee_id";
+Query query = session.createQuery(hql);
+query.setParameter("salary", 1000);
+query.setParameter("employee_id", 10);
+int result = query.executeUpdate();
+System.out.println("Rows affected: " + result);
+
+
+
+
+
+
+Hibernate supports named parameters in its HQL queries. This makes writing HQL queries that accept input from the user easy and you do not have to defend against SQL injection attacks. Following is the simple syntax of using named parameters:
+
+String hql = "FROM Employee E WHERE E.id = :employee_id";
+Query query = session.createQuery(hql);
+query.setParameter("employee_id",10);
+List results = query.list();
+
+
+
+
+
+
+
+This clause lets Hibernate pull information from the database and group it based on a value of an attribute and, typically, use the result to include an aggregate value. Following is the simple syntax of using GROUP BY clause:
+
+String hql = "SELECT SUM(E.salary), E.firstName FROM Employee E " +
+             "GROUP BY E.firstName";
+Query query = session.createQuery(hql);
+List results = query.list();
+
+
+
+
+
+
+To sort your HQL query's results, you will need to use the ORDER BY clause. You can order the results by any property on the objects in the result set either ascending (ASC) or descending (DESC). Following is the simple syntax of using ORDER BY clause:
+
+String hql = "FROM Employee E WHERE E.id > 10 ORDER BY E.salary DESC";
+Query query = session.createQuery(hql);
+List results = query.list();
+If you wanted to sort by more than one property, you would just add the additional properties to the end of the order by clause, separated by commas as follows:
+
+String hql = "FROM Employee E WHERE E.id > 10 " +
+             "ORDER BY E.firstName DESC, E.salary DESC ";
+Query query = session.createQuery(hql);
+List results = query.list();
+
+
+
+
+String SQL_QUERY = "FROM Employee E WHERE E.Id = 2";
+  Query query = session.createQuery(SQL_QUERY);
+    
+  for(Iterator it=query.iterate();it.hasNext();)
+  {
+   Employee emp = (Employee)it.next();
+   System.out.println(“Employee Name: " + emp.getEmpName());
+   System.out.println(“Employee id: " + emp.getEmpId());
+  }
+  session.getTransaction().commit();
+  session.close();
+
+                      
+                      
+                      
+                      
+                      
+
+
+If you want to narrow the specific objects that are returned from storage, you use the WHERE clause. Following is the simple syntax of using WHERE clause:
+
+String hql = "FROM Employee E WHERE E.id = 10";
+Query query = session.createQuery(hql);
+List results = query.list();
+
+
+
+
+
+
+
+The SELECT clause provides more control over the result set than the from clause. If you want to obtain few properties of objects instead of the complete object, use the SELECT clause. Following is the simple syntax of using SELECT clause to get just first_name field of the Employee object:
+
+String hql = "SELECT E.firstName FROM Employee E";
+Query query = session.createQuery(hql);
+List results = query.list();
+It is notable here that Employee.firstName is a property of Employee object rather than a field of the EMPLOYEE table.
+
+
+
+
+
+
+
+You will use FROM clause if you want to load a complete persistent objects into memory. Following is the simple syntax of using FROM clause:
+
+String hql = "FROM Employee";
+Query query = session.createQuery(hql);
+List results = query.list();
+
+If you need to fully qualify a class name in HQL, just specify the package and class name as follows:
+
+String hql = "FROM com.hibernatebook.criteria.Employee";
+Query query = session.createQuery(hql);
+List results = query.list();
+
+
+
+
+
+
+Hibernate Query Language (HQL) is an object-oriented query language, similar to SQL, but instead of operating on tables and columns, HQL works with persistent objects and their properties. HQL queries are translated by Hibernate into conventional SQL queries which in turns perform action on database.
+
+Although you can use SQL statements directly with Hibernate using Native SQL but I would recommend to use HQL whenever possible to avoid database portability hassles, and to take advantage of Hibernate's SQL generation and caching strategies.
+
+Keywords like SELECT , FROM and WHERE etc. are not case sensitive but properties like table and column names are case sensitive in HQL.
+
+
+
+
+
+
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration SYSTEM "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+ 
+ 
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+        <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password">shital@123</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/test1</property>
+        <property name="show_sql">true</property>
+        <property name="format_sql">false</property>
+        <mapping resource="user.hbm.xml"/> 
+    </session-factory>
+</hibernate-configuration>
+
+
+
+
+
+
+<?xml version='1.0' encoding='UTF-8'?>  
+<!DOCTYPE hibernate-mapping PUBLIC  
+ "-//Hibernate/Hibernate Mapping DTD 3.0//EN"  
+ "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">  
+  
+ <hibernate-mapping>  
+ <class name="com.training.mypack.User" table="user">  
+ <id name="id">  
+ <generator class="increment"></generator>  
+ </id>  
+ <property name="name"></property>  
+ <property name="password"></property>  
+ <property name="email"></property>  
+ </class>  
+         
+ </hibernate-mapping>  
+
+
+
+
+
+package com.training.mypack;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.*;  
+import org.hibernate.cfg.*;  
+  
+public class UserDao{  
+	public static int register(User u){
+		System.out.println(u.getId());
+		System.out.println(u.getName());
+		System.out.println(u.getPassword());
+		int i=0;
+		SessionFactory factory=new Configuration().configure().buildSessionFactory();
+		Session session = factory.openSession();
+		Transaction t=session.beginTransaction();
+		t.begin();
+		i=(Integer)session.save(u);
+		t.commit();
+		session.close();
+		factory.close();
+		return i;  
+	}  
+}
+
+
+
+
+
+package com.training.mypack;
+
+public class User{
+	private int id;
+	private String name,password,email;
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+}
+
+
+
+<%@page import="com.training.mypack.*"%>
+<jsp:useBean id="obj" class="com.training.mypack.User">
+</jsp:useBean>
+<jsp:setProperty property="*" name="obj" />
+<%
+	int i = UserDao.register(obj);
+if (i > 0)
+	out.print("You are successfully registered");
+else
+	out.print("You are NOT successfully registered");
+%>
+
+
+
+
+
+
+
+
+
+
+
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<form action="register.jsp" method="post">  
+Name:<input type="text" name="name"/><br><br/>  
+Password:<input type="password" name="password"/><br><br/>  
+Email ID:<input type="text" name="email"/><br><br/>  
+<input type="submit" value="register"/>"
+</form> 
+</body>
+</html>
+
+
+
+--------------------------------------------------------------
+
+https://gofile.io/d/jdnZNR
+    
+
+
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration SYSTEM "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+ 
+ 
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password">shital@123</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/test1</property>
+        <property name="show_sql">true</property>
+        <property name="format_sql">false</property>
+        <mapping class="com.training.org.Student"/>
+    </session-factory>
+</hibernate-configuration>
+
+
+
+
+
+
+
+
+
+
+package com.training.org;
+
+import java.util.List;
+
+import org.hibernate.Session;
+ 
+import com.training.org.Student;
+ 
+/**
+ * Class used to perform CRUD operation on database with Hibernate API's
+ * 
+ */
+public class HibernateStandAloneDemo {
+ 
+    @SuppressWarnings("unused")
+    public static void main(String[] args) {
+ 
+        HibernateStandAloneDemo application = new HibernateStandAloneDemo();
+ 
+        /*
+         * Save few objects with hibernate
+         */
+        int studentId1 = application.saveStudent("Sam", "Disilva", "Maths");
+        int studentId2 = application.saveStudent("Joshua", "Brill", "Science");
+        int studentId3 = application.saveStudent("Peter", "Pan", "Physics");
+        int studentId4 = application.saveStudent("Bill", "Laurent", "Maths");
+ 
+        /*
+         * Retrieve all saved objects
+         */
+        List<Student> students = application.getAllStudents();
+        System.out.println("List of all persisted students >>>");
+        for (Student student : students) {
+            System.out.println("Persisted Student :" + student);
+        }
+ 
+        /*
+         * Update an object
+         */
+        application.updateStudent(studentId4, "ARTS");
+ 
+        /*
+         * Deletes an object
+         */
+        application.deleteStudent(studentId2);
+ 
+        /*
+         * Retrieve all saved objects
+         */
+        List<Student> remaingStudents = application.getAllStudents();
+        System.out.println("List of all remained persisted students >>>");
+        for (Student student : remaingStudents) {
+            System.out.println("Persisted Student :" + student);
+        }
+ 
+    }
+ 
+    /**
+     * This method saves a Student object in database
+     */
+    public int saveStudent(String firstName, String lastName, String section) {
+        Student student = new Student();
+        student.setFirstName(firstName);
+        student.setLastName(lastName);
+        student.setSection(section);
+ 
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        session.beginTransaction();
+ 
+        int id = (Integer) session.save(student);
+        session.getTransaction().commit();
+        session.close();
+        return id;
+    }
+ 
+    /**
+     * This method returns list of all persisted Student objects/tuples from
+     * database
+     */
+    public List<Student> getAllStudents() {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        session.beginTransaction();
+ 
+        @SuppressWarnings("unchecked")
+        List<Student> employees = (List<Student>) session.createQuery(
+                "FROM Student s ORDER BY s.firstName ASC").list();
+ 
+        session.getTransaction().commit();
+        session.close();
+        return employees;
+    }
+ 
+    /**
+     * This method updates a specific Student object
+     */
+    public void updateStudent(int id, String section) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        session.beginTransaction();
+ 
+        Student student = (Student) session.get(Student.class, id);
+        student.setSection(section);
+        //session.update(student);//No need to update manually as it will be updated automatically on transaction close.
+        session.getTransaction().commit();
+        session.close();
+    }
+ 
+    /**
+     * This method deletes a specific Student object
+     */
+    public void deleteStudent(int id) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        session.beginTransaction();
+ 
+        Student student = (Student) session.get(Student.class, id);
+        session.delete(student);
+        session.getTransaction().commit();
+        session.close();
+    }
+}
+
+
+
+
+
+
+
+
+
+
+package com.training.org;
+
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.AnnotationConfiguration;
+ 
+import com.training.org.Student;
+ 
+@SuppressWarnings("deprecation")
+public class HibernateUtil {
+     
+    private static final SessionFactory sessionFactory;
+     
+    static{
+        try{
+            sessionFactory = new AnnotationConfiguration().configure().buildSessionFactory();
+ 
+        }catch (Throwable ex) {
+            System.err.println("Session Factory could not be created." + ex);
+            throw new ExceptionInInitializerError(ex);
+        }   
+    }
+     
+    public static SessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
+     
+}
+
+
+
+
+
+
+
+package com.training.org;
+
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "STUDENT")
+public class Student implements Serializable {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+
+	@Column(name = "FIRST_NAME", nullable = false)
+	private String firstName;
+
+	@Column(name = "LAST_NAME", nullable = false)
+	private String lastName;
+
+	@Column(name = "SECTION", nullable = false)
+	private String section;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getSection() {
+		return section;
+	}
+
+	public void setSection(String section) {
+		this.section = section;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof Student))
+			return false;
+		Student other = (Student) obj;
+		if (id != other.id)
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Student [id=" + id + ", firstName=" + firstName + ", lastName="
+				+ lastName + ", section=" + section + "]";
+	}
+
+}
+
+
+
+
+create table STUDENT (
+   id INT NOT NULL auto_increment PRIMARY KEY,
+   first_name VARCHAR(30) NOT NULL,
+   last_name  VARCHAR(30) NOT NULL,
+   section    VARCHAR(30) NOT NULL
+);
+
+
+
+
+
+
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+ 
+    <groupId>com.websystique.hibernate</groupId>
+    <artifactId>HibernateStandAloneWithAnnotationDemo</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+ 
+    <name>HibernateStandAloneWithAnnotationDemo</name>
+ 
+    <properties>
+        <hibernate.version>4.3.6.Final</hibernate.version>
+        <mysql.connector.version>5.1.31</mysql.connector.version>
+    </properties>
+ 
+    <dependencies>	
+        <!-- Hibernate -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+ 
+        <!-- MySQL -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.16</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.2</version>
+                    <configuration>
+                        <source>1.6</source>
+                        <target>1.6</target>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+ 
+</project>
+
+
+
+
+
+
+
+
+
+create table employee(id int(10),firstname varchar(30),lastname varchar(30));
+
+
+
+	public static void main( String[] args ) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException  
+	{  
+		
+		FileInputStream inFile = new FileInputStream("plainfile.txt");
+		FileOutputStream outFile = new FileOutputStream("plainfile.des");
+
+		String password = "javapapers";
+		PBEKeySpec pbeKeySpec = new PBEKeySpec(password.toCharArray());
+		SecretKeyFactory secretKeyFactory = SecretKeyFactory
+				.getInstance("PBEWithMD5AndTripleDES");
+		SecretKey secretKey = secretKeyFactory.generateSecret(pbeKeySpec);
+
+		byte[] salt = new byte[8];
+		Random random = new Random();
+		random.nextBytes(salt);
+
+		PBEParameterSpec pbeParameterSpec = new PBEParameterSpec(salt, 100);
+		Cipher cipher = Cipher.getInstance("PBEWithMD5AndTripleDES");
+		cipher.init(Cipher.ENCRYPT_MODE, secretKey, pbeParameterSpec);
+		outFile.write(salt);
+
+		byte[] input = new byte[64];
+		int bytesRead;
+		while ((bytesRead = inFile.read(input)) != -1) {
+			byte[] output = cipher.update(input, 0, bytesRead);
+			if (output != null)
+				outFile.write(output);
+		}
+
+		byte[] output = cipher.doFinal();
+		if (output != null)
+			outFile.write(output);
+
+		inFile.close();
+		outFile.flush();
+		outFile.close();
+        
+        
+        
+
+
+
+BankCustomer
+
+custId
+custName
+custBalance
+custOnlineId
+custOnlinePassword
+custContactNo
+custEmailId
+
+
+
+
+
+
+package com.training.org;
+import org.hibernate.Session;  
+import org.hibernate.SessionFactory;  
+import org.hibernate.Transaction;  
+import org.hibernate.boot.Metadata;  
+import org.hibernate.boot.MetadataSources;  
+import org.hibernate.boot.registry.StandardServiceRegistry;  
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;  
+  
+public class StoreData {  
+  
+    public static void main( String[] args )  
+    {  
+         StandardServiceRegistry ssr = new StandardServiceRegistryBuilder().configure("hibernate.cfg.xml").build();  
+            Metadata meta = new MetadataSources(ssr).getMetadataBuilder().build();  
+          
+        SessionFactory factory = meta.getSessionFactoryBuilder().build();  
+        Session session = factory.openSession();  
+        Transaction t = session.beginTransaction();  
+          
+         Employee e1=new Employee();    
+            e1.setId(1);    
+            e1.setFirstName("eshan");    
+            e1.setLastName("madake");    
+         
+       session.save(e1);  
+       t.commit();  
+       System.out.println("successfully saved");    
+        factory.close();  
+        session.close();     
+    }  
+}  
+
+
+
+
+
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+ <class name="com.training.org.Employee" table="employee">  
+    <id name="id">  
+     <generator class="assigned"></generator>  
+    </id>  
+            
+    <property name="firstName"></property>  
+    <property name="lastName"></property>  
+            
+  </class>  
+            
+ </hibernate-mapping>  
+
+
+
+
+
+
+
+
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration SYSTEM "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+ 
+ 
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password">shital@123</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/test1</property>
+        <property name="show_sql">true</property>
+        <property name="format_sql">false</property>
+        <mapping resource="employee.hbm.xml"/> 
+    </session-factory>
+</hibernate-configuration>
+
+
+
+
+https://gofile.io/d/GqBfBb
+
+
+
+package com.training.org;
+public class Employee {  
+	private int id;  
+	private String firstName;
+	private String lastName;  
+
+	public int getId() {  
+		return id;  
+	}  	
+	public void setId(int id) {  
+		this.id = id;  
+	}  
+	public String getFirstName() {  
+		return firstName;  
+	}  
+	public void setFirstName(String firstName) {  
+		this.firstName = firstName;  
+	}  
+	public String getLastName() {  
+		return lastName;  
+	}  
+	public void setLastName(String lastName) {  
+		this.lastName = lastName;  
+	}  
+}  

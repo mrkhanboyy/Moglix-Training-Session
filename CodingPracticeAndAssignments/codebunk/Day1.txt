@@ -1,0 +1,439 @@
+link codebunk : https://codebunk.com/b/3101100283728/
+
+quiz1 : 
+https://quizizz.com/join?gc=507553
+
+
+
+
+
+https://gofile.io/d/hpX1m7
+    
+    
+    
+    
+    
+    
+
+
+import java.util.Scanner;
+
+public class Employee {
+	
+	private int empId;
+	private String name;
+	private double salary;
+	
+	public Employee() {
+		System.out.println("Default constructor is called");
+		empId=0;
+		name="";
+		salary=0;
+	}
+	
+	public Employee(int empId,String name,double salary) {
+		System.out.println("Parameterised constructor is called");
+		this.empId=empId;
+		this.name=name;
+		this.salary=salary;
+	}
+	
+	public void showEmployeeDetails() {
+		System.out.println("Employee details are ");
+		System.out.println("EmpId"+empId+" Name"+name+"Salary"+salary );
+	}
+	
+	
+	public static void main(String[] args) {
+
+		Scanner myObj = new Scanner(System.in);
+
+		System.out.println("Enter empId ");
+		int id=myObj.nextInt();
+		System.out.println("Enter name");
+		myObj.nextLine();
+		String name=myObj.nextLine();
+		System.out.println("Enter salary");
+		double sal=myObj.nextDouble();
+		
+		Employee e1=new Employee(id,name,sal);
+		e1.showEmployeeDetails();
+	}
+	
+	
+	
+}
+
+
+
+
+
+
+public class class_name[pascal case] {
+
+	1] member variables as private with camel case notation
+	2] default constructor as public
+	3] parameterised constructor as public
+ 	4] setters as public
+	5] getters as public
+	6] Behaviours as public
+}
+
+
+
+
+
+public class Employee {
+	
+	private int empId;
+	private String name;
+	private double salary;
+	
+	public Employee() {
+		System.out.println("Default constructor is called");
+		empId=0;
+		name="";
+		salary=0;
+		
+	}
+	
+	public Employee(int empId,String name,double salary) {
+		System.out.println("Parameterised constructor is called");
+		this.empId=empId;
+		this.name=name;
+		this.salary=salary;
+	}
+	
+	public void showEmployeeDetails() {
+		System.out.println("Employee details are ");
+		System.out.println("EmpId"+empId+" Name"+name+"Salary"+salary );
+	}
+	
+	
+	public static void main(String[] args) {
+		Employee e1=new Employee(101,"Eshan",10000);
+		e1.showEmployeeDetails();
+	}
+	
+	
+	
+}
+
+
+
+
+
+
+package com.training.org;
+
+import java.util.Scanner;
+
+public class MethodExample {
+
+	public static void addition() {
+		System.out.println("Hello Welcome to JAVA Programming");
+
+		Scanner myObj = new Scanner(System.in);
+		
+		System.out.println("Enter first number");
+		int num1=myObj.nextInt();
+		int num2=myObj.nextInt();
+		
+		System.out.println("Addition of numbers is "+(num1+num2));
+	
+	}
+	
+	public static void substraction(int a,int b) {
+		
+	}
+	
+	public static void main(String[] args) {
+
+		Scanner myObj = new Scanner(System.in);
+		char ch='y';
+		do
+		{
+			System.out.println("1] Addition\n2] Subtraction\n3] Multiplication\n4] Division\n\nEnter your choice");
+			int choice=myObj.nextInt();
+			
+			switch(choice) {
+			case 1:
+					addition();
+					break;
+			case 2:
+					System.out.println("Enter two numbers");
+					int num1=myObj.nextInt();
+					int num2=myObj.nextInt();
+					
+					substraction(num1,num2);
+					
+					break;
+						
+				
+			}
+			System.out.println("Do you want to continue.....");
+			ch=myObj.next().charAt(0);
+		}while(ch=='y'||ch=='Y');
+			
+		if(ch=='n'||ch=='N') {
+			System.out.println("Thank you visit again");
+		}
+
+	}
+
+}
+
+
+
+
+
+
+
+
+swith case
+
+1] 
+	add()
+	add()	
+	add()
+2] 
+	main
+	sub()
+	sub()
+
+3] 	
+	multi()
+	multi()
+	main
+
+4] 	
+	main
+	div()
+	main
+
+    
+    
+
+
+http://www.java2s.com/Code/Jar/s/Downloadservletapijar.htm
+    
+    
+
+1] Accept two int values from user and print 
+   addition 
+   subtration
+   multiplication
+   division
+
+
+2] Accept four digit number
+    
+   4567 
+
+  and display addition of digits and a format like
+
+   4000+500+60+7 = 4567
+
+   addition of digits = 22
+
+
+    
+    
+    
+
+
+
+package com.training.org;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Scanner;
+
+import javax.swing.JOptionPane;
+
+public class HelloWorld {
+	public static void main(String[] args) throws IOException {
+		
+	
+		
+		String name=JOptionPane.showInputDialog("Enter your name");
+		System.out.println("Name is "+name);
+		
+		JOptionPane.showMessageDialog(null, name);
+		
+		
+		//Using Console class
+		
+//		String name=System.console().readLine();
+//		System.out.println("Name is "+name);
+//		
+		
+			
+//		BufferedReader reader=new BufferedReader(new InputStreamReader(System.in));
+//		String name=reader.readLine();
+//		
+//		System.out.println("Name is "+name);
+//		
+
+		
+		
+		
+		
+		
+//		System.out.println("Hello Welcome to JAVA Programming");
+//		
+//		Scanner myObj = new Scanner(System.in);
+//		
+//		System.out.println("Enter your name");
+//		String userName=myObj.nextLine();
+//		
+//		
+////		System.out.println("UserName is "+userName);
+//		
+//		System.out.println("Enter your age");
+//		int age=myObj.nextInt();
+//		
+//		System.out.println("Enter your salary");
+//		double salary=myObj.nextDouble();
+//		
+//		System.out.println("Values are"+userName+" Age"+age+"Salary"+salary);
+		
+	}
+}
+
+
+
+
+
+
+package com.training.org;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Scanner;
+
+public class HelloWorld {
+	public static void main(String[] args) throws IOException {
+		
+		
+		
+		String name=System.console().readLine();
+		
+		System.out.println("Name is "+name);
+		
+		
+		
+		
+		
+//		
+//		BufferedReader reader=new BufferedReader(new InputStreamReader(System.in));
+//		String name=reader.readLine();
+//		
+//		System.out.println("Name is "+name);
+//		
+
+		
+		
+		
+		
+		
+//		System.out.println("Hello Welcome to JAVA Programming");
+//		
+//		Scanner myObj = new Scanner(System.in);
+//		
+//		System.out.println("Enter your name");
+//		String userName=myObj.nextLine();
+//		
+//		
+////		System.out.println("UserName is "+userName);
+//		
+//		System.out.println("Enter your age");
+//		int age=myObj.nextInt();
+//		
+//		System.out.println("Enter your salary");
+//		double salary=myObj.nextDouble();
+//		
+//		System.out.println("Values are"+userName+" Age"+age+"Salary"+salary);
+		
+	}
+}
+
+
+
+
+
+
+JVM is the heart of Java's network orientation.
+JVM is software abstraction for a generic h/w platform.
+JVM is responsible for carrying out platform-specific functions.
+JVM is highly platform-dependent.
+
+
+
+
+
+Bytecode Verifier is responsible for verifying the byte codes.
+i.e. Bytecode do not violate Java’s security restrictions.
+Checks the internal consistency of the class & the validity of the code. 
+
+
+
+
+
+
+Class Loader loads  required .class files in memory.
+Class Loader can load files from
+local disk.
+over a local network.
+Over the Internet.
+
+
+
+
+
+
+Distributed System.
+Extensive library support for protocols like TCP/IP,HTTP & FTP.
+Applications can access objects across the net with ease.
+E.g.
+Creating socket connections,Servlets & 	  CGI scripting.
+RMI enables communication between different objects.
+
+
+
+
+
+Java programs are Reliable.
+Early checking for potential problems.
+Dynamic checking to eliminate error-prone situations.
+Developer doesn’t have to worry about
+Bad pointers.
+Memory allocation errors.
+Memory leakage.
+
+
+
+
+
+
+Background: Electronic consumer devices.
+Sun commissioned ‘Project Green’.
+Developed language ‘Oak’ -Later renamed to Java.
+Was dismissed as just another OO programming language.
+Became popular with the rising popularity of ‘www’.
+
+
+
+
+
+
+https://quizizz.com/join?gc=507553
+    
+
+
+Hello Good morning 
+
+
+

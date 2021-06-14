@@ -1,0 +1,709 @@
+package com.training.org;
+
+
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+ 
+
+public class HibernateUtil {
+	private static SessionFactory sessionFactory;
+	
+	
+	private static SessionFactory buidSessionFactory() {
+		
+		return new Configuration().configure().buildSessionFactory();
+
+	}
+	
+	
+	public static SessionFactory getSessionFactory() {
+		return sessionFactory;
+	}
+	
+	
+	public static void shutDown() {
+		getSessionFactory().close();
+	}
+
+}
+
+
+
+mysql> use test1;
+Database changed
+mysql> create table user(id int(10),name varchar(30),password varchar(20),email varchar(40));
+Query OK, 0 rows affected (0.04 sec)
+
+mysql>
+
+
+
+
+<?xml version='1.0' encoding='UTF-8'?>  
+<!DOCTYPE hibernate-configuration PUBLIC  
+          "-//Hibernate/Hibernate Configuration DTD 3.0//EN"  
+          "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">  
+  
+<hibernate-configuration>  
+  
+<session-factory>  
+ <property name="hbm2ddl.auto">create</property>  
+ <property name="dialect">org.hibernate.dialect.Oracle9Dialect</property>  
+ <property name="connection.url">jdbc:oracle:thin:@localhost:1521:xe</property>  
+ <property name="connection.username">system</property>  
+ <property name="connection.password">oracle</property>  
+ <property name="connection.driver_class">oracle.jdbc.driver.OracleDriver</property>  
+      
+ <mapping resource="user.hbm.xml"/>  
+ </session-factory>  
+  
+</hibernate-configuration>  
+
+
+
+
+
+
+import org.hibernate.Session;  
+import org.hibernate.Transaction;  
+import org.hibernate.cfg.Configuration;  
+  
+public class UserDao {  
+  
+public static int register(User u){  
+ int i=0;  
+ Session session=new Configuration().  
+  configure().buildSessionFactory().openSession();  
+          
+  Transaction t=session.beginTransaction();  
+  t.begin();  
+                  
+  i=(Integer)session.save(u);  
+                  
+  t.commit();  
+  session.close();  
+    
+  return i;  
+ }  
+} 
+
+
+
+
+
+<?xml version='1.0' encoding='UTF-8'?>  
+<!DOCTYPE hibernate-mapping PUBLIC  
+ "-//Hibernate/Hibernate Mapping DTD 3.0//EN"  
+ "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">  
+  
+ <hibernate-mapping>  
+ <class name="User" table="u400">  
+ <id name="id">  
+ <generator class="increment"></generator>  
+ </id>  
+ <property name="name"></property>  
+ <property name="password"></property>  
+ <property name="email"></property>  
+ </class>  
+         
+ </hibernate-mapping>  
+
+
+
+
+
+
+public class User {  
+private int id;  
+private String name,password,email;  
+  
+//getters and setters  
+  
+}  
+
+
+
+
+
+
+This file gets all request parameters and stores this information into an object of User class. Further, it calls the register method of UserDao class passing the User class object.
+
+<%@page import="com.training.mypack.UserDao"%>  
+<jsp:useBean id="obj" class="com.training.mypack.User">  
+</jsp:useBean>  
+<jsp:setProperty property="*" name="obj"/>  
+  
+<%  
+int i=UserDao.register(obj);  
+if(i>0)  
+out.print("You are successfully registered");  
+  
+%> 
+
+
+
+
+
+index.jsp
+
+This page gets input from the user and sends it to the register.jsp file using post method.
+
+<form action="register.jsp" method="post">  
+Name:<input type="text" name="name"/><br><br/>  
+Password:<input type="password" name="password"/><br><br/>  
+Email ID:<input type="text" name="email"/><br><br/>  
+<input type="submit" value="register"/>"  
+  
+</form> 
+
+
+
+
+-----------------------------------------------
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+
+public class MainFile {
+	public static void main(String[] args) {
+
+		StandardServiceRegistry ssr = new StandardServiceRegistryBuilder().configure("hibernate.cfg.xml").build();  
+		Metadata meta = new MetadataSources(ssr).getMetadataBuilder().build();  
+
+		SessionFactory factory = meta.getSessionFactoryBuilder().build();  
+		Session session = factory.openSession();  
+		Transaction t = session.beginTransaction();
+		
+		
+		Stock s1=new Stock(101,"YES010","YESBANK");
+		
+		session.save(s1);
+		t.commit();
+		System.out.println("successfully saved");    
+		factory.close();  
+		session.close();     
+
+	}
+}
+
+
+
+
+
+
+
+
+
+import org.hibernate.*;  
+import org.hibernate.cfg.*;  
+  
+public class Test {  
+public static void main(String[] args) {  
+    Session session=new AnnotationConfiguration()  
+         .configure().buildSessionFactory().openSession();  
+    Transaction t=session.beginTransaction();  
+      
+    Employee e1=new Employee();  
+    e1.setId(1001);  
+    e1.setFirstName(“SBM");  
+    e1.setLastName(“MADAKE");  
+      
+    Employee e2=new Employee();  
+    e2.setId(1002);  
+    e2.setFirstName(“Vipul");  
+    e2.setLastName(“Rathi");  
+    session.persist(e1);  
+    session.persist(e2);  
+    t.commit();  
+    session.close();  
+    System.out.println("successfully saved");  
+}  
+} 
+
+                   
+                   
+                   
+
+<?xml version='1.0' encoding='UTF-8'?>  
+<!DOCTYPE hibernate-configuration PUBLIC  
+          "-//Hibernate/Hibernate Configuration DTD 3.0//EN"  
+          "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">  
+  
+<hibernate-configuration>  
+  
+<session-factory>  
+ <property name="hbm2ddl.auto">create</property>  
+ <property name="dialect">org.hibernate.dialect.Oracle9Dialect</property>  
+ <property name="connection.url">jdbc:oracle:thin:@localhost:1521:xe</property>  
+ <property name="connection.username">CTS</property>  
+ <property name="connection.password">CTS</property>  
+ <property name="connection.driver_class">oracle.jdbc.driver.OracleDriver</property>  
+      
+ <mapping class="Employee"/>  
+ </session-factory>  
+  
+</hibernate-configuration> 
+
+
+
+
+
+
+import javax.persistence.Entity;  
+import javax.persistence.Id;  
+import javax.persistence.Table;  
+  
+@Entity  
+@Table(name= "emp500")  
+public class Employee {  
+@Id  
+private int id;  
+private String firstName,lastName;  
+  
+public int getId() {  
+    return id;  
+}  
+public void setId(int id) {  
+    this.id = id;  
+}  
+public String getFirstName() {  
+    return firstName;  
+}  
+public void setFirstName(String firstName) {  
+    this.firstName = firstName;  
+}  
+public String getLastName() {  
+    return lastName;  
+}  
+public void setLastName(String lastName) {  
+    this.lastName = lastName;  
+}  
+   
+} 
+
+
+
+
+
+
+
+https://gofile.io/d/sCmNZ5
+    
+    
+
+
+http://websystique.com/hibernate/hibernate-mysql-maven-hello-world-example-annotation/
+    
+    
+    
+
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.training.org</groupId>
+	<artifactId>AnnotaionExample</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<dependencies>
+		<!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>5.2.6.Final</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.40</version>
+		</dependency>
+
+
+	</dependencies>
+
+</project>
+
+
+
+
+
+
+
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+ 
+<hibernate-configuration>
+    <session-factory>
+        <!-- Database connection settings -->
+        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/techm</property>
+        <property name="connection.username">root</property>
+        <property name="connection.password">shital@123</property>
+        
+        <!-- JDBC connection pool (use the built-in) -->
+        <property name="connection.pool_size">1</property>
+        
+        <!-- SQL dialect -->
+        <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+
+        <!-- Enable Hibernate's automatic session context management -->
+        <property name="current_session_context_class">thread</property>
+
+        <!-- Disable the second-level cache  -->
+        <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+        
+        <!-- Echo all executed SQL to stdout -->
+        <property name="show_sql">true</property>
+        
+        <property name="hbm2ddl.auto">validate</property>
+ 
+ 		
+ 	<mapping class="com.training.org.Employee"/>	 
+    </session-factory>
+    
+</hibernate-configuration>
+
+
+
+
+
+
+package com.training.org;
+
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.AnnotationConfiguration;
+
+import net.sf.ehcache.config.Configuration;
+
+public class MainFile {
+	public static void main(String[] args) {  
+		Session session=new AnnotationConfiguration()  
+				.configure().buildSessionFactory().openSession();  
+		Transaction t=session.beginTransaction();  
+
+		Employee e1=new Employee(201,"Anish",20000);  
+		
+		Employee e2=new Employee(202,"Parimal",30000);  
+		session.persist(e1);  
+		session.persist(e2);  
+		t.commit();  
+		session.close();  
+		System.out.println("successfully saved");  
+	}  
+
+}
+
+
+
+
+
+package com.training.org;
+
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+import org.hibernate.annotations.Entity;
+import org.hibernate.annotations.Table;
+
+@Entity
+@Table(name="employee")
+
+public class Employee {
+	@Id @GeneratedValue
+	private int empId;
+
+	@Column(name="name")
+	private String name;
+
+	@Column(name="salary")
+	private double salary;
+
+
+	public Employee() {
+		super();
+	}
+
+	public Employee(int empId, String name, double salary) {
+		super();
+		this.empId = empId;
+		this.name = name;
+		this.salary = salary;
+	}
+
+	public int getEmpId() {
+		return empId;
+	}
+
+	public void setEmpId(int empId) {
+		this.empId = empId;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public double getSalary() {
+		return salary;
+	}
+
+	public void setSalary(double salary) {
+		this.salary = salary;
+	}
+
+	@Override
+	public String toString() {
+		return "Employee [empId=" + empId + ", name=" + name + ", salary=" + salary + "]";
+	}
+
+
+
+
+
+
+}
+
+
+
+
+https://gofile.io/d/jh1l9H
+    
+    
+    
+    
+    
+    
+
+package com.training.org;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="employee")
+
+public class Employee {
+	@Id @GeneratedValue
+	private int empId;
+	
+	@Column(name="name")
+	private String name;
+	
+	@Column(name="salary")
+	private double salary;
+	
+	
+	public Employee() {
+		super();
+	}
+
+	public Employee(int empId, String name, double salary) {
+		super();
+		this.empId = empId;
+		this.name = name;
+		this.salary = salary;
+	}
+
+	public int getEmpId() {
+		return empId;
+	}
+
+	public void setEmpId(int empId) {
+		this.empId = empId;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public double getSalary() {
+		return salary;
+	}
+
+	public void setSalary(double salary) {
+		this.salary = salary;
+	}
+
+	@Override
+	public String toString() {
+		return "Employee [empId=" + empId + ", name=" + name + ", salary=" + salary + "]";
+	}
+	
+	
+
+	
+	
+
+}
+
+
+
+
+package com.training.org;
+
+public class Stock {
+
+	private int stockid;
+	private String stockCode;
+	private String stockName;
+
+	public Stock() {
+		super();
+	}
+
+	public Stock(int stockid, String stockCode, String stockName) {
+		super();
+		this.stockid = stockid;
+		this.stockCode = stockCode;
+		this.stockName = stockName;
+	}
+
+	public int getStockid() {
+		return stockid;
+	}
+	public void setStockid(int stockid) {
+		this.stockid = stockid;
+	}
+	public String getStockCode() {
+		return stockCode;
+	}
+	public void setStockCode(String stockCode) {
+		this.stockCode = stockCode;
+	}
+	public String getStockName() {
+		return stockName;
+	}
+	public void setStockName(String stockName) {
+		this.stockName = stockName;
+	}
+
+
+
+}
+
+
+
+
+
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+ 
+<hibernate-configuration>
+    <session-factory>
+        <!-- Database connection settings -->
+        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/hibernate</property>
+        <property name="connection.username">root</property>
+        <property name="connection.password">shital@123</property>
+        
+        <!-- JDBC connection pool (use the built-in) -->
+        <property name="connection.pool_size">1</property>
+        
+        <!-- SQL dialect -->
+        <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+
+        <!-- Enable Hibernate's automatic session context management -->
+        <property name="current_session_context_class">thread</property>
+
+        <!-- Disable the second-level cache  -->
+        <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+        
+        <!-- Echo all executed SQL to stdout -->
+        <property name="show_sql">true</property>
+        
+        <property name="hbm2ddl.auto">validate</property>
+ 
+        <mapping resource="hibernate.hbm.xml"/>
+ 		
+ 		 
+    </session-factory>
+</hibernate-configuration>
+
+
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+	<class name="com.training.org.Stock" table="stock">
+		<id name="stockid" column="stockid">
+			<generator class="assigned"></generator>
+		</id>
+		<property name="stockCode" column="stock_code" />
+		<property name="stockName" column="stock_name" />
+	</class>
+
+</hibernate-mapping>
+
+
+
+package com.training.org;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+
+public class MainFile {
+	public static void main(String[] args) {
+
+		StandardServiceRegistry ssr = new StandardServiceRegistryBuilder().configure("hibernate.cfg.xml").build();  
+		Metadata meta = new MetadataSources(ssr).getMetadataBuilder().build();  
+
+		SessionFactory factory = meta.getSessionFactoryBuilder().build();  
+		Session session = factory.openSession();  
+		Transaction t = session.beginTransaction();
+		
+		
+		Stock s1=new Stock(101,"YES010","YESBANK");
+		
+		session.save(s1);
+		t.commit();
+		System.out.println("successfully saved");    
+		factory.close();  
+		session.close();     
+
+	}
+}
+
+
+
+
+
+
+create table stock(stockid int(10),stock_code varchar(10),stock_name varchar(20), primary key(stockid));
+
+
+
+c

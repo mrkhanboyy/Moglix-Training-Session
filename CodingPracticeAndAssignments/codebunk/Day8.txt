@@ -1,0 +1,1064 @@
+package com.training.org;
+
+
+import org.hibernate.Session;  
+import org.hibernate.SessionFactory;  
+import org.hibernate.Transaction;  
+import org.hibernate.boot.Metadata;  
+import org.hibernate.boot.MetadataSources;  
+import org.hibernate.boot.registry.StandardServiceRegistry;  
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;  
+  
+
+public class MainClass {
+	public static void main(String[] args) {
+
+		StandardServiceRegistry ssr = new StandardServiceRegistryBuilder().configure("student.cfg.xml").build();  
+		Metadata meta = new MetadataSources(ssr).getMetadataBuilder().build();  
+
+		SessionFactory factory = meta.getSessionFactoryBuilder().build();  
+		Session session = factory.openSession();  
+		Transaction t = session.beginTransaction();  
+
+		Student s1=new Student(1,"Arpil",456);    
+		
+		session.save(s1);  
+		t.commit();  
+		
+		
+		
+		System.out.println("successfully saved");    
+		factory.close();  
+		session.close();     
+	}
+}
+
+
+
+
+
+
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+	<class name="com.training.org.Student" table="student">
+		<id name="stdId" column="stdid">
+			<generator class="assigned"></generator>
+		</id>
+		<property name="stdName" column="studentname" />
+		<property name="marks" column="marks" />
+	</class>
+
+</hibernate-mapping>
+
+
+
+
+
+
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+ 
+<hibernate-configuration>
+    <session-factory>
+        <!-- Database connection settings -->
+        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/techm</property>
+        <property name="connection.username">root</property>
+        <property name="connection.password">shital@123</property>
+        
+        <!-- JDBC connection pool (use the built-in) -->
+        <property name="connection.pool_size">1</property>
+        
+        <!-- SQL dialect -->
+        <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+
+        <!-- Enable Hibernate's automatic session context management -->
+        <property name="current_session_context_class">thread</property>
+
+        <!-- Disable the second-level cache  -->
+        <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+        
+        <!-- Echo all executed SQL to stdout -->
+        <property name="show_sql">true</property>
+        
+        <property name="hbm2ddl.auto">validate</property>
+ 
+        <mapping resource="student.hbm.xml"/>
+ 		
+ 		 
+    </session-factory>
+</hibernate-configuration>
+
+
+
+
+
+
+package com.training.org;
+
+public class Student {
+
+	private int stdId;
+	private String stdName;
+	private double marks;
+	
+	
+	public Student() {
+		super();
+	}
+
+	
+	public Student(int stdId, String stdName, double marks) {
+		super();
+		this.stdId = stdId;
+		this.stdName = stdName;
+		this.marks = marks;
+	}
+	public int getStdId() {
+		return stdId;
+	}
+	public void setStdId(int stdId) {
+		this.stdId = stdId;
+	}
+	public String getStdName() {
+		return stdName;
+	}
+	public void setStdName(String stdName) {
+		this.stdName = stdName;
+	}
+	public double getMarks() {
+		return marks;
+	}
+	public void setMarks(double marks) {
+		this.marks = marks;
+	}
+	@Override
+	public String toString() {
+		return "Student [stdId=" + stdId + ", stdName=" + stdName + ", marks=" + marks + "]";
+	}
+
+
+
+}
+
+
+
+
+
+
+
+create table student(stdid int,studentname varchar(30),marks double);
+
+
+
+
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+    "-//Hibernate/Hibernate Configuration DTD//EN"
+    "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+    
+    
+
+
+create table employee2(empid int,name varchar(40),salary int);
+
+
+
+
+https://gofile.io/d/Dxi3B3
+    
+    
+    
+    
+    
+    
+    
+
+
+package com.training.org;
+import org.hibernate.Session;  
+import org.hibernate.SessionFactory;  
+import org.hibernate.Transaction;  
+import org.hibernate.boot.Metadata;  
+import org.hibernate.boot.MetadataSources;  
+import org.hibernate.boot.registry.StandardServiceRegistry;  
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;  
+  
+
+public class MainClass {
+	public static void main(String[] args) {
+
+		StandardServiceRegistry ssr = new StandardServiceRegistryBuilder().configure("employee.cfg.xml").build();  
+		Metadata meta = new MetadataSources(ssr).getMetadataBuilder().build();  
+
+		SessionFactory factory = meta.getSessionFactoryBuilder().build();  
+		Session session = factory.openSession();  
+		Transaction t = session.beginTransaction();  
+
+		Employee e1=new Employee(101,"Tanihs",1000);    
+//		e1.setId(1);    
+//		e1.setName("tanish");    
+//		e1.setSalary(10000);    
+
+		session.save(e1);  
+		t.commit();  
+		System.out.println("successfully saved");    
+		factory.close();  
+		session.close();     
+	}
+}
+
+
+
+
+
+
+
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+ 
+<hibernate-configuration>
+    <session-factory>
+        <!-- Database connection settings -->
+        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/techm</property>
+        <property name="connection.username">root</property>
+        <property name="connection.password">shital@123</property>
+        
+        <!-- JDBC connection pool (use the built-in) -->
+        <property name="connection.pool_size">1</property>
+        
+        <!-- SQL dialect -->
+        <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+
+        <!-- Enable Hibernate's automatic session context management -->
+        <property name="current_session_context_class">thread</property>
+
+        <!-- Disable the second-level cache  -->
+        <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+        
+        <!-- Echo all executed SQL to stdout -->
+        <property name="show_sql">true</property>
+        
+        <property name="hbm2ddl.auto">validate</property>
+ 
+        <mapping resource="employee.hbm.xml"/>
+ 		
+ 		 
+    </session-factory>
+</hibernate-configuration>
+
+
+
+
+
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+	<class name="com.training.org.Employee" table="employee">
+		<id name="id" column="empid">
+			<generator class="assigned"></generator>
+		</id>
+		<property name="name" column="name" />
+		<property name="salary" column="salary" />
+	</class>
+
+</hibernate-mapping>
+
+
+
+
+
+
+package com.training.org;
+
+public class Employee {
+
+	private int id;
+	private String name;
+	private double salary;
+
+	public Employee() {
+		super();
+	}
+	public Employee(int id, String name, double salary) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.salary = salary;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public double getSalary() {
+		return salary;
+	}
+	public void setSalary(double salary) {
+		this.salary = salary;
+	}
+	@Override
+	public String toString() {
+		return "Employee [id=" + id + ", name=" + name + ", salary=" + salary + "]";
+	}
+
+
+
+
+
+
+
+}
+
+
+
+
+
+-----------------------------------------------------------
+
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+ 
+<hibernate-configuration>
+    <session-factory>
+        <!-- Database connection settings -->
+        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/shital</property>
+        <property name="connection.username">root</property>
+        <property name="connection.password">shital@123</property>
+        
+        <!-- JDBC connection pool (use the built-in) -->
+        <property name="connection.pool_size">1</property>
+        
+        <!-- SQL dialect -->
+        <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+
+        <!-- Enable Hibernate's automatic session context management -->
+        <property name="current_session_context_class">thread</property>
+
+        <!-- Disable the second-level cache  -->
+        <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+        
+        <!-- Echo all executed SQL to stdout -->
+        <property name="show_sql">false</property>
+        
+        <property name="hbm2ddl.auto">validate</property>
+ 
+        <mapping resource="employee.hbm.xml"/>
+ 		
+ 		 
+    </session-factory>
+</hibernate-configuration>
+
+
+
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+    <class name="Employee" table="employee">
+ 		<id name="id" column="empid">
+            <generator class="native"/>
+        </id>
+        <property name="name" column="name"/>
+        <property name="salary" column="salary"/>
+	</class>
+
+</hibernate-mapping>
+
+
+
+
+
+package com.training.org;
+
+public class Employee {
+	
+	private int id;
+	private String name;
+	private double salary;
+
+	public Employee() {
+		super();
+	}
+	public Employee(int id, String name, double salary) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.salary = salary;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public double getSalary() {
+		return salary;
+	}
+	public void setSalary(double salary) {
+		this.salary = salary;
+	}
+	@Override
+	public String toString() {
+		return "Employee [id=" + id + ", name=" + name + ", salary=" + salary + "]";
+	}
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+Hibernate is a high-performance Object/Relational persistence and query service which is licensed under the open source GNU Lesser General Public License (LGPL) and is free to download. Hibernate not only takes care of the mapping from Java classes to database tables (and from Java data types to SQL data types), but also provides data query and retrieval facilities.
+It is open source object-relational mapping (ORM) for Java.
+Hibernate is responsible for making data persistent by storing it in a database.
+
+
+
+
+
+
+Object / Relational mapping (ORM) and persistence / query framework
+i.e. It does even more stuff for you!
+Some features of Hibernate
+HibernateDaoSupport – superclass, easy HibernateTemplate access
+Database independence - sits between the database and your java code, easy database switch without changing any code
+Object / Relational Mapping (ORM) - Allows a developer to treat a database like a collection of Java objects
+Object oriented query language (HQL) - *Portable* query language, supports polymorphic queries etc.
+You can also still issue native SQL, and also queries by “Criteria” (specified using “parse tree” of Java objects)
+Hibernate Mapping - Uses HBM XML files to map value objects (POJOs) to database tables 
+Transparent persistence - Allows easy saves/delete/retrieve for simple value objects
+Very high performance “in general” due to intelligent (2-level) caching, although in a few cases hand-written SQL might beat it
+
+
+
+
+
+
+
+
+Java Database Connectivity
+Industry standard but has some issues:
+The developer needs to deal with lot of plumbing and infrastructure, such as endless try-catch-finally-try-catch blocks. 
+Applications need complex error handling to ensure that connections are properly closed after they're used, which makes the code verbose, bloated, and repetitive. 
+JDBC uses the rather uninformative SQLException. 
+JDBC has no exception hierarchy
+Bottom Line: Don’t use this!
+
+
+    
+    
+
+The storage of an object on a disk or other permanent storage device or data that exists from session to session
+as opposed to transient data
+Persistent data typically implies that it is durable (i.e. will survive a crash or shutdown of the process) usually with some guarantee of integrity
+Persistence generally implies use of a database
+One could use the file system (with suitably careful procedures)
+
+
+
+
+
+
+ORM stands for Object-Relational Mapping (ORM) is a programming technique for converting data between relational databases and object oriented programming languages such as Java, C# etc. An ORM system has following advantages over plain JDBC
+
+It is a programming technique for converting object-type data of an object oriented programming language into database tables.
+Hibernate is used convert object data in JAVA to relational database tables.
+
+
+    
+    
+    ORM goal: Take advantage of the things SQL databases do well, without leaving the Java language of objects and classes.
+
+
+ORM real goal: Do less work and have a happy DBA.
+
+
+Hibernate is an open-source ORM toolkit for the Java language, providing a framework for mapping an object-oriented domain model to a traditional relational database.
+
+
+
+
+https://quizizz.com/join?gc=168426
+    
+    
+    
+
+
+User sends a request for the action
+Container maps the request in the web.xml file and gets the class name of controller.
+Container invokes the controller (StrutsPrepareAndExecuteFilter or FilterDispatcher). Since struts2.1, it is StrutsPrepareAndExecuteFilter. Before 2.1 it was FilterDispatcher.
+Controller gets the information for the action from the ActionMapper
+Controller invokes the ActionProxy
+ActionProxy gets the information of action and interceptor stack from the configuration manager which gets the information from the struts.xml file.
+ActionProxy forwards the request to the ActionInvocation
+ActionInvocation invokes each interceptors and action
+A result is generated
+The result is sent back to the ActionInvocation
+A HttpServletResponse is generated
+Response is sent to the user
+
+
+    
+    
+    
+
+
+https://gofile.io/d/W36Kdc
+    
+    
+    
+    
+
+
+
+https://struts.apache.org/download.cgi#struts2526
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+
+It is the view component the displays information of the action. Here, we are using struts tags to get the information.
+
+The s:property tag returns the value for the given name, stored in the action object.
+
+welcome.jsp
+<%@ taglib uri="/struts-tags" prefix="s" %>  
+  
+Product Id:<s:property value="id"/><br/>  
+Product Name:<s:property value="name"/><br/>  
+Product Price:<s:property value="price"/><br/> 
+
+        
+        
+
+struts.xml
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts  
+Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">  
+<struts>  
+<package name="default" extends="struts-default">  
+  
+<action name="product" class="com.javatpoint.Product">  
+<result name="success">welcome.jsp</result>  
+</action>  
+  
+</package>  
+</struts> 
+
+
+
+
+
+
+It is the important file from where struts framework gets information about the action and decides which result to be invoked. Here, we have used many elements such as struts, package, action and result.
+
+struts element is the root elements of this file. It represents an application.
+
+package element is the sub element of struts. It represents a module of the application. It generally extends the struts-default package where many interceptors and result types are defined.
+
+action element is the sub element of package. It represents an action to be invoked for the incoming request. It has name, class and method attributes. If you don't specify name attribute by default execute() method will be invoked for the specified action class.
+
+result element is the sub element of action. It represents an view (result) that will be invoked. Struts framework checks the string returned by the action class, if it returns success, result page for the action is invoked whose name is success or has no name. It has name and type attributes. Both are optional. If you don't specify the result name, by default success is assumed as the result name. If you don't specify the type attribute, by default dispatcher is considered as the default result type. We will learn about result types later.
+
+
+
+
+This is simple bean class. In struts 2, action is POJO (Plain Old Java Object). It has one extra method execute i.e. invoked by struts framework by default.
+
+Product.java
+package com.javatpoint;  
+ public class Product {  
+private int id;  
+private String name;  
+private float price;  
+public int getId() {  
+    return id;  
+}  
+public void setId(int id) {  
+    this.id = id;  
+}  
+public String getName() {  
+    return name;  
+}  
+public void setName(String name) {  
+    this.name = name;  
+}  
+
+public float getPrice() {  
+    return price;  
+}  
+public void setPrice(float price) {  
+    this.price = price;  
+}  
+  
+public String execute(){  
+    return "success";  
+}  
+} 
+
+        
+        
+        
+
+
+In struts 2, StrutsPrepareAndExecuteFilter class works as the controller. As we know well, struts 2 uses filter for the controller. It is implicitly provided by the struts framework.
+
+web.xml
+<?xml version="1.0" encoding="UTF-8"?>  
+<web-app>  
+  <filter>  
+  <filter-name>struts2</filter-name>  
+   <filter-class>  
+    org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter  
+   </filter-class>  
+  </filter>  
+  <filter-mapping>  
+   <filter-name>struts2</filter-name>  
+    <url-pattern>/*</url-pattern>  
+  </filter-mapping>  
+</web-app> 
+
+
+
+
+
+
+https://gofile.io/d/tpuK5Q
+    
+    
+    
+
+
+This jsp page creates a form using struts UI tags. To use the struts UI tags, you need to specify uri /struts-tags. Here, we have used s:form to create a form, s:textfield to create a text field, s:submit to create a submit button.
+
+index.jsp
+<%@ taglib uri="/struts-tags" prefix="s" %>  
+<s:form action="product">  
+<s:textfield name="id" label="Product Id"></s:textfield>  
+<s:textfield name="name" label="Product Name"></s:textfield>  
+<s:textfield name="price" label="Product Price"></s:textfield>  
+<s:submit value="save"></s:submit>  
+</s:form> 
+
+    
+    
+    
+    
+    
+    
+Now copy following files from struts 2 lib folder C:\struts-2.2.3\lib to our project's WEB-INF\lib folder. To do this, you can simply drag and drop all the following files into WEB-INF\lib folder.
+
+commons-fileupload-x.y.z.jar
+commons-io-x.y.z.jar
+commons-lang-x.y.jar
+commons-logging-x.y.z.jar
+commons-logging-api-x.y.jar
+freemarker-x.y.z.jar
+javassist-.xy.z.GA
+ognl-x.y.z.jar
+struts2-core-x.y.z.jar
+xwork-core.x.y.z.jar
+
+
+
+
+
+
+
+
+Create the directory structure
+Create input page (index.jsp)
+Provide the entry of Controller in (web.xml) file
+Create the action class (Product.java)
+Map the request with the action in (struts.xml) file and define the view components
+Create view components (welcome.jsp)
+load the jar files
+start server and deploy the project
+
+
+
+
+
+
+
+
+https://dzone.com/tutorials/java/struts/struts-tutorial/struts-tutorial-using-eclipse-1.html
+    
+    
+    
+
+https://struts.apache.org/download.cgi#struts2526
+    
+    
+    
+
+
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix="s" uri="/struts-tags" %>
+    
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+ Hello World, <s:property value="name"/>
+
+</body>
+</html>
+
+
+
+
+
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix="s" uri="/struts-tags"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>Hello World</title>
+</head>
+<body>
+	<h1>Hello World From Struts2</h1>
+	<form action="hello">
+		<label for="name">Please enter your name</label><br /> <input
+			type="text" name="name" /> <input type="submit" value="Say Hello" />
+	</form>
+</body>
+</html>
+
+
+
+
+
+
+package com.PATH.org;
+
+public class HelloWorldAction{
+private String name;
+
+public String execute() throws Exception {
+return "success";
+}
+
+public String getName() {
+return name;
+}
+
+public void setName(String name) {
+this.name = name;
+}
+}
+
+
+
+
+Action interface provides 5 constants that can be returned form the action class. They are:
+
+SUCCESS indicates that action execution is successful and a success result should be shown to the user.
+ERROR indicates that action execution is failed and a error result should be shown to the user.
+LOGIN indicates that user is not logged-in and a login result should be shown to the user.
+INPUT indicates that validation is failed and a input result should be shown to the user again.
+NONE indicates that action execution is successful but no result should be shown to the user.
+Let's see what values are assigned to these constants:
+
+public static final String SUCCESS = "success";  
+public static final String ERROR = "error";  
+public static final String LOGIN  = "login";  
+public static final String INPUT = "input";  
+public static final String NONE = "none";  
+Method of Action Interface
+
+Action interface contains only one method execute that should be implemented overridden by the action class even if you are not forced.
+
+public String execute(); 
+
+
+
+
+
+
+
+
+Struts is a set of cooperating classes, servlets, and JSP tags that make up a reusable MVC 2 design. 
+This definition implies that Struts is a framework, rather than a library.
+Struts also contains an extensive tag library and utility classes that work independently of the framework.
+
+
+
+
+A model-view-controller (MVC) Model 2 implementation that uses servlets and JavaServer pages (JSP) technology.
+
+
+
+
+
+
+There is still separation of presentation from content, because all data access is performed using beans.
+Model 1 architecture is perfectly suitable for simple applications but it may not be desirable for complex implementations.
+Indiscriminate usage of this architecture usually leads to a significant amount of scriptlets or Java code embedded within the JSP page
+
+
+
+
+
+
+Open Source java framework for creating web applications.
+Action Based Framework
+Create web application using MVC 2 architecture
+Apache Struts offer two major version 
+Struts 1.x
+Struts 2.0
+Struts 2 = WebWork + Struts
+
+
+
+WebWork was a Java-based web application framework developed by OpenSymphony that merged into the current Struts2 framework. It was designed to improve developer productivity and simplify code.
+
+
+    
+    
+
+
+A JSP file is a java servlet.
+A JSP file is nothing more than another way to view a servlet. 
+The concept of a JSP file is to allow us to see a Java servlet as an HTML page. 
+The JSP file is pre-processed into a .java file, then compiled into a .class file. 
+JSP technology provides the glue between the page designer and the Java developer. 
+
+
+
+
+
+
+
+package com.training.org;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class DeleteCookies extends HttpServlet {
+
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		Cookie cookie=null;
+		Cookie[] cookies=null;
+		
+		cookies=req.getCookies();
+		
+		PrintWriter out =resp.getWriter();
+		if(cookies!=null) {
+			
+			for(int i=0;i<cookies.length;i++) {
+				cookie=cookies[i];
+				if((cookie.getName()).compareTo("first_name")==0) {
+					cookie.setMaxAge(0);
+					resp.addCookie(cookie);
+					out.println("Delete Cookie "+cookie.getName()+"<br>");
+				}
+			}
+		}
+		
+//		
+//		for (int i = 0; i < cookies.length; i++) {
+//			System.out.println(cookies[i].getName());
+//			
+//		}
+		
+	}
+}
+
+
+
+
+
+
+
+
+package com.training.org;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.sun.net.httpserver.spi.HttpServerProvider;
+
+public class CookieForm extends HttpServlet{
+
+	public void doGet(HttpServletRequest req,HttpServletResponse res) throws IOException {
+		
+		Cookie firstname=new Cookie("first_name",req.getParameter("first_name"));
+		Cookie lastname=new Cookie("last_name",req.getParameter("last_name"));
+		
+		
+		
+		//set expriry after 24 hours
+		firstname.setMaxAge(60*60*24);
+		lastname.setMaxAge(60*60*24);
+		
+		//add both the cookie to response 
+		res.addCookie(firstname);
+		res.addCookie(lastname);
+		
+		
+		res.setContentType("text/html");
+		
+		PrintWriter out=res.getWriter();
+		
+		out.println("<!DOCTYPE html>\r\n" + 
+				"<html>\r\n" + 
+				"<head>\r\n" + 
+				"	<title></title>\r\n" + 
+				"</head>\r\n" + 
+				"<body>\r\n" + 
+				"\r\n" + 
+				"<ul>\r\n" + 
+				"	<li>\r\n" +req.getParameter("first_name")+
+				"\r\n" + 
+				"	</li>\r\n" + 
+				"\r\n" + 
+				"	<li>\r\n" +req.getParameter("last_name")+ 
+				"	</li>\r\n" + 
+				"</ul>\r\n" + 
+				"\r\n" + 
+				"\r\n" + 
+				"</body>\r\n" + 
+				"</html>");
+		
+		
+		
+		
+	}
+}
+
+
+
+
+
+
+
+Cookies store information about a session in a human-readable file on the client's machine. The server associates a session ID from the cookie with the data from that session 
+A cookie cannot grow more than 4K in size, and no domain can have more than 20 cookies
+Cookies pose some privacy concerns for users
+
+
+
+A Cookie is a string (in this case that string is the session ID) which is sent to a client at the start of a session. If the client wants to continue the session it sends back the Cookie with subsequent requests. This is the most common way to implement session tracking
+
+
+
+
+
+import java.io.IOException;
+        import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+public class ServletLifeCycleExample extends HttpServlet {
+    private int count;
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        getServletContext().log("init() called");
+        count = 0;
+    }
+     @Override
+    protected void service(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        getServletContext().log("service() called");
+        count++;
+        response.getWriter().write("Incrementing the count: count = " + count);
+    }
+     @Override
+    public void destroy() {
+        getServletContext().log("destroy() called");
+    }
+}
+
+
+
+
+
+
+
+DAY 1 :- https://codebunk.com/b/3101100283728/
+DAY 2 :- https://codebunk.com/b/3101100284487/
+DAY 3:- https://codebunk.com/b/4341100285240/
+DAY 4:-https://codebunk.com/b/9291100285880/
+Day 5:- https://codebunk.com/b/2581100286280/
+DAY 6:-https://codebunk.com/b/3491100286996/
+DAY 7 :-https://codebunk.com/b/8021100287859/
+DAY 8:- https://codebunk.com/b/7771100288603/
+
+
+        
+        
